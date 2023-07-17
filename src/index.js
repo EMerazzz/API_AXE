@@ -9,6 +9,7 @@ app.use(express.json());
 
 // Routes
 //app.use(require('./routes/personas'));
+app.use(require('./routes/moduloMatricula/matricula'));
 
 // Starting the server
 app.listen(app.get('port'), () => {

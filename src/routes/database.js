@@ -1,11 +1,11 @@
 const mysql = require('mysql');
 
 const mysqlConnection = mysql.createConnection({
-  host: 'bd-matricula-implementacion.mysql.database.azure.com',
+  host: 'localhost',
   port: 3306,
-  user: 'administrador',
-  password: '@servidor1',
-  database: 'colegio',
+  user: 'root',
+  password: '',
+  database: 'AXE',
   multipleStatements: true
 });
 
