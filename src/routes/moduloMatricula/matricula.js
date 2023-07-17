@@ -28,15 +28,15 @@ router.get('/SELmatricula', (req, res) => {
 }); 
 
 //MOTRAR DATOS DE TABLA MATRICULA SEGUN ID
-router.get('/SELmatriculaid/:parametroBI1', (req, res) => { 
+router.get('/SELmatriculaid/:COD_MATRICULA', (req, res) => { 
 
-  const { parametroBI1 } = req.params;
+  const {COD_MATRICULA } = req.params;
   const query = `
 
   CALL AXE.SP_modulomatricula('MM_MATRICULA', 'SO',?,0,0,'0');
 `;
 
-  mysqlConnection.query(query, [parametroBI1], (err, rows) => {
+  mysqlConnection.query(query, [COD_MATRICULA], (err, rows) => {
      if(!err) {
       res.json(rows[0]);
      } else {
@@ -49,15 +49,15 @@ router.get('/SELmatriculaid/:parametroBI1', (req, res) => {
 // INSERT EN LA TABLA MM_MATRICULA
 router.post('/INSmatricula', (req, res) => { 
 
-  const {parametroBI2,parametroBI3, parametroV1} = req.body;
+  const {COD_ESTUDIANTE,COD_NIVACAD_ANIOACAD, PERIODO_ACADEMICO} = req.body;
    const query = `
-     SET @parametroBI2 = ?;
-     SET @parametroBI3 =?;
-     SET @parametroV1 = ?;
+     SET @COD_ESTUDIANTE = ?;
+     SET @COD_NIVACAD_ANIOACAD =?;
+     SET @PERIODO_ACADEMICO = ?;
 
-     CALL AXE.SP_modulomatricula('MM_MATRICULA', 'I', '0', @parametroBI2,@parametroBI3, @parametroV1);
+     CALL AXE.SP_modulomatricula('MM_MATRICULA', 'I', '0',@COD_ESTUDIANTE,@COD_NIVACAD_ANIOACAD,@PERIODO_ACADEMICO);
    `;
-   mysqlConnection.query(query, [parametroBI2,parametroBI3, parametroV1], (err, rows, fields) => {
+   mysqlConnection.query(query, [COD_ESTUDIANTE,COD_NIVACAD_ANIOACAD, PERIODO_ACADEMICO], (err, rows, fields) => {
      if(!err) {
       res.json({status: 'MATRICULA Ingresada'});
      } else {
@@ -69,15 +69,15 @@ router.post('/INSmatricula', (req, res) => {
 
 
 //UPDATE DE DATOS DE LA MM_MATRICULA
-router.put('/UPDmatricula/:parametroBI1', (req, res) => {
-  const {parametroBI2,parametroBI3, parametroV1} = req.body;
-  const {parametroBI1} = req.params;
+router.put('/UPDmatricula/:COD_MATRICULA', (req, res) => {
+  const {COD_ESTUDIANTE,COD_NIVACAD_ANIOACAD, PERIODO_ACADEMICO} = req.body;
+  const {COD_MATRICULA} = req.params;
   const query = `
 
   CALL AXE.SP_modulomatricula('MM_MATRICULA', 'U',?,?,?,?);
 `;
 
-  mysqlConnection.query(query, [parametroBI1,parametroBI2,parametroBI3, parametroV1], (err, rows, fields) => {
+  mysqlConnection.query(query, [COD_MATRICULA,COD_ESTUDIANTE,COD_NIVACAD_ANIOACAD, PERIODO_ACADEMICO], (err, rows, fields) => {
       if(!err) {
         res.json({status: 'MATRICULA ACTUALIZADA'});
       } else {
