@@ -22,7 +22,7 @@ router.post('/login', (req, res) => {
       } else {
         if (results.length > 0) {
   
-          const token = jwt.sign({ USUARIO }, secretTokenAccess, (err, token) => {
+          const token = jwt.sign({ USUARIO, CONTRASENA }, secretTokenAccess, {expiresIn:'1h'}, (err, token) => {
             //Generación de token 
             res.json({
               token,
