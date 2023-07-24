@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+
+const jwt = require('jsonwebtoken')
+const verifyToken = require('./verify');
 const mysqlConnection = require('../database');
 /******************************* TABLA DOCENTES *************************** */
 /*
@@ -14,24 +17,21 @@ const mysqlConnection = require('../database');
 
 */
 
-
 //MOTRAR DATOS DE LA TABLA DE MD_DOCENTES
-router.get('/docentes', (req, res) => { 
+// Ruta para mostrar datos de la tabla de MD_DOCENTES
+router.get('/docentes', verifyToken, (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
 
-// console.log(id, name, salary);
-const query = `
+  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0,0,0,'0','0','0');`;
 
-CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0,0,0,'0','0','0');
-`;
-    mysqlConnection.query(query, (err, rows, fields) => {
-        if (!err) {
-            res.json(rows[0]);
-        } else {
-            console.log('Error al consultar la tabla MD_DOCENTES');
-            
-        }
-    });
-
+  mysqlConnection.query(query, (err, rows, fields) => {
+    if (!err) {
+      res.json(rows[0]);
+    } else {
+      console.log('Error al consultar la tabla MD_DOCENTES');
+      res.status(500).json({ message: "Error al consultar la tabla MD_DOCENTES" });
+    }
+  });
 });
 
 //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE
