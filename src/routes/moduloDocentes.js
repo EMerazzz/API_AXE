@@ -35,7 +35,8 @@ router.get('/docentes', verifyToken, (req, res) => {
 });
 
 //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE
-router.get('/docentes/:COD_DOCENTE', (req, res) => {
+router.get('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
+          // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_DOCENTE } = req.params;
     const query = `
 
@@ -51,7 +52,8 @@ router.get('/docentes/:COD_DOCENTE', (req, res) => {
 });
 
 //INSERTAR DATOS EN LA TABLA DE MD_DOCENTES
-router.post('/nuevo_docente', (req, res) => {
+router.post('/nuevo_docente', verifyToken, (req, res) => {
+          // Verificación de JWT ya realizada por el middleware verifyToken
     const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA} = req.body;
    
     const query = `
@@ -75,7 +77,8 @@ router.post('/nuevo_docente', (req, res) => {
   });//FIN DEL POST PARA INSERTAR EN MD_DOCENTES
 
   //UPDATE DE LA TABLA  MD_DOCENTES
-  router.put('/modificar_docente', (req, res) => {
+  router.put('/modificar_docente',  verifyToken, (req, res) => {
+           // Verificación de JWT ya realizada por el middleware verifyToken 
     const {COD_DOCENTE,COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA} = req.body;
     const query = `
     CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}','${COD_PERSONA}',0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}') ;
@@ -101,7 +104,8 @@ router.post('/nuevo_docente', (req, res) => {
 */
 
 //MOTRAR DATOS DE LA TABLA DE MDA_DOCENTES_ASIGNATURAS
-router.get('/docentes_asignaturas', (req, res) => { 
+router.get('/docentes_asignaturas', verifyToken,  (req, res) => { 
+          // Verificación de JWT ya realizada por el middleware verifyToken
 
     // console.log(id, name, salary);
     const query = `
@@ -121,7 +125,8 @@ router.get('/docentes_asignaturas', (req, res) => {
     
    
   //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE_ASIGNATURA
-  router.get('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA', (req, res) => {
+  router.get('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  verifyToken, (req, res) => {
+            // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_DOCENTE_ASIGNATURA } = req.params;
     const query = `
   
@@ -138,7 +143,8 @@ router.get('/docentes_asignaturas', (req, res) => {
    
  
   //INSERTAR DATOS EN LA TABLA DE MDA_DOCENTES_ASIGNATURAS
-  router.post('/nuevo_docentes_asignaturas', (req, res) => {
+  router.post('/nuevo_docentes_asignaturas',  verifyToken, (req, res) => {
+            // Verificación de JWT ya realizada por el middleware verifyToken
     const {COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES} = req.body;
    
     const query = `
@@ -159,7 +165,8 @@ router.get('/docentes_asignaturas', (req, res) => {
   });//FIN DEL POST PARA INSERTAR EN MD_DOCENTES_ASIGNATURAS
   
     //UPDATE DE LA TABLA  MDA_DOCENTES_ASIGNATURAS
-    router.put('/modificar_docentes_asignaturas', (req, res) => {
+    router.put('/modificar_docentes_asignaturas',  verifyToken, (req, res) => {
+              // Verificación de JWT ya realizada por el middleware verifyToken
       const {COD_DOCENTE_ASIGNATURA,COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES} = req.body;
       const query = `
       
