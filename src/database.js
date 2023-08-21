@@ -10,6 +10,16 @@ const mysqlConnection = mysql.createConnection({
   multipleStatements: true
 });
 
+/*
+const mysqlConnection = mysql.createConnection({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'admin',
+  database: 'axe',
+  multipleStatements: true
+});
+*/
 
 //Esto es para trabajar con mi BD de manera local, quitar, cuando se conecta al servidor remoto
 

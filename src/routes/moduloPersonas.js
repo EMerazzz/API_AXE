@@ -9,7 +9,7 @@ const mysqlConnection = require('../database');
 
 /*************************TABLA PERSONAS ************************** */
 //MOTRAR DATOS DE LA TABLA DE ASIGNATURAS
-router.get('/personas', verifyToken, (req, res) => {
+router.get('/personas', /*verifyToken,*/ (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0, '1990-01-01', null)`, (err, rows) => {
