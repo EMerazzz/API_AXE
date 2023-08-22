@@ -1,13 +1,18 @@
 const express = require('express');
 const app = express();
 
+
 // Settings
-app.set('port', process.env.PORT || 3000);
+//*Habilito el 4000, solo de manera local, cuando pase a produccion pasar a puerto 4000
+app.set('port', process.env.PORT || 4000);
 
 // Middlewares
 app.use(express.json());
 
 // Routes
+// Ruta login
+// app.use(require('./routes/login'));
+
 // modulo personas
 app.use(require('./routes/moduloPersonas'));
 //modulo matricula
@@ -21,6 +26,7 @@ app.use(require('./routes/moduloSeguridad'));
 //modulo docentes
 app.use(require('./routes/moduloDocentes'));
 
+app.use(require('./routes/login'));
 
 // Starting the server
 app.listen(app.get('port'), () => {
