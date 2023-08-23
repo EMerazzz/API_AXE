@@ -19,7 +19,7 @@ const mysqlConnection = require('../database');
 
 //MOTRAR DATOS DE LA TABLA DE MD_DOCENTES
 // Ruta para mostrar datos de la tabla de MD_DOCENTES
-router.get('/docentes', /*verifyToken,*/ (req, res) => {
+router.get('/docentes', verifyToken, (req, res) => {
   // Verificación de JWT ya realizada por el middleware verifyToken
 
   const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0,0,0,'0','0','0');`;
@@ -35,7 +35,7 @@ router.get('/docentes', /*verifyToken,*/ (req, res) => {
 });
 
 //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE
-router.get('/docentes/:COD_DOCENTE',  /*verifyToken,*/ (req, res) => {
+router.get('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
           // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_DOCENTE } = req.params;
     const query = `
@@ -77,12 +77,12 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
   });//FIN DEL POST PARA INSERTAR EN MD_DOCENTES
 
   //UPDATE DE LA TABLA  MD_DOCENTES
-  router.put('/docentes/:COD_DOCENTE',  /*verifyToken,*/ (req, res) => {
+  router.put('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
            // Verificación de JWT ya realizada por el middleware verifyToken 
       const { COD_DOCENTE } = req.params;
     const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA} = req.body;
     const query = `
-    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}','${COD_PERSONA}',0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}') ;
+    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}') ;
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err) {
@@ -105,7 +105,7 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
 */
 
 //MOTRAR DATOS DE LA TABLA DE MDA_DOCENTES_ASIGNATURAS
-router.get('/docentes_asignaturas', /*verifyToken,*/  (req, res) => { 
+router.get('/docentes_asignaturas', verifyToken,  (req, res) => { 
           // Verificación de JWT ya realizada por el middleware verifyToken
 
     // console.log(id, name, salary);
@@ -126,7 +126,7 @@ router.get('/docentes_asignaturas', /*verifyToken,*/  (req, res) => {
     
    
   //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE_ASIGNATURA
-  router.get('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  /*verifyToken,*/ (req, res) => {
+  router.get('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  verifyToken, (req, res) => {
             // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_DOCENTE_ASIGNATURA } = req.params;
     const query = `
@@ -144,7 +144,7 @@ router.get('/docentes_asignaturas', /*verifyToken,*/  (req, res) => {
    
  
   //INSERTAR DATOS EN LA TABLA DE MDA_DOCENTES_ASIGNATURAS
-  router.post('/docentes_asignaturas',  /*verifyToken,*/ (req, res) => {
+  router.post('/docentes_asignaturas',  verifyToken, (req, res) => {
             // Verificación de JWT ya realizada por el middleware verifyToken
     const {COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES} = req.body;
    
@@ -166,7 +166,7 @@ router.get('/docentes_asignaturas', /*verifyToken,*/  (req, res) => {
   });//FIN DEL POST PARA INSERTAR EN MD_DOCENTES_ASIGNATURAS
   
     //UPDATE DE LA TABLA  MDA_DOCENTES_ASIGNATURAS
-    router.put('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  /*verifyToken,*/ (req, res) => {
+    router.put('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  verifyToken, (req, res) => {
               // Verificación de JWT ya realizada por el middleware verifyToken
       const { COD_DOCENTE_ASIGNATURA } = req.params;
       const {COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES} = req.body;

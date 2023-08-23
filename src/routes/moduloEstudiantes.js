@@ -48,8 +48,8 @@ router.post("/estudiantes", /*verifyToken,*/ (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
-      const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVACAD_ANIOACAD, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
-      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','I','1','${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVACAD_ANIOACAD}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','${JORNADA_ESTUDIANTE}')`;
+      const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVEL_ACADEMICO, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
+      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','I','1','${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','${JORNADA_ESTUDIANTE}')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -71,8 +71,8 @@ router.post("/estudiantes", /*verifyToken,*/ (req, res) => {
   
     try {
       const { COD_ESTUDIANTE } = req.params;
-      const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVACAD_ANIOACAD, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
-      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','U',${COD_ESTUDIANTE},'${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVACAD_ANIOACAD}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','${JORNADA_ESTUDIANTE}')`;
+      const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVEL_ACADEMICO, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
+      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','U',${COD_ESTUDIANTE},'${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','${JORNADA_ESTUDIANTE}')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
