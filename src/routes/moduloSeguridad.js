@@ -317,26 +317,23 @@ router.put('/pregunta_contrasenia/:COD_PREGUNTA', verifyToken, (req, res) => {
 /*********************************** TABLA MS_ROLES ***************************** */
 //MOTRAR DATOS DE LA TABLA
 router.get('/roles', verifyToken, (req, res) => {
-    try {
-        jwt.verify(req.token, global.secretTokenAccess, (err) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
-                const consulta = `CALL SP_moduloseguridad('ms_roles', 'SA', 1, 1, 1, 1, 1, 1, '1', '1', '1')`;
-                mysqlConnection.query(consulta, (error, results) => {
-                    if (error) throw error;
-                    if (results.length > 0) {
-                        res.status(200).json(results[0]);
-                    } else {
-                        res.send(error);
-                    }
-                });
-            }
-        });
-    } catch (error) {
-        res.send(error);
-    }
-});
+    // Verificación de JWT ya realizada por el middleware verifyToken
+ //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
+        //   if (err) {
+         //      res.sendStatus(403);
+          //  } else {
+    mysqlConnection.query(`call axe.SP_moduloseguridad('MS_ROLES', 'SA', 1, 1, 1, 1, 1, 1, '1', '1', '1');`, (err, rows) => {
+      if (!err) {
+        res.status(200).json(rows[0]);
+      } else {
+        console.log('Se ha producido un error');
+        res.sendStatus(500);
+      }
+    //});
+    // }
+       });
+  });
+  
 
 //Mostrar datos por codigo
 router.get("/roles/:COD_ROL", verifyToken, (req, res) => {

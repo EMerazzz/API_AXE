@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Routes
 // Ruta login
-app.use(require('./routes/login'));
+// app.use(require('./routes/login'));
 
 // modulo personas
 app.use(require('./routes/moduloPersonas'));
@@ -26,6 +26,7 @@ app.use(require('./routes/moduloSeguridad'));
 //modulo docentes
 app.use(require('./routes/moduloDocentes'));
 
+app.use(require('./routes/login'));
 
 // Starting the server
 app.listen(app.get('port'), () => {

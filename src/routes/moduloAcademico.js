@@ -60,7 +60,7 @@ router.post("/asignaturas", verifyToken, (req, res) => {
     }
 });
    //Metodo put
-router.put("/asignaturas/:COD_ASIGNATURA", verifyToken, (req, res) => {
+router.put("/asignaturas/:COD_ASIGNATURA", verifyToken,(req, res) => {
     try {
         const { COD_ASIGNATURA } = req.params;
         const { NOMBRE_ASIGNATURA } = req.body;
@@ -158,7 +158,7 @@ router.post("/jornadas/", verifyToken, (req, res) => {
 
    /******************** MA_ANIO ACADEMICO *************************/
 //MOTRAR DATOS DE LA TABLA ANIO ACADEMICO
-router.get('/SELanio_academico/', verifyToken, (req, res) => {
+router.get('/anio_academico', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
     mysqlConnection.query(`Call SP_moduloAcademico('MA_ANIO_ACADEMICO','SA','1','1','1','null')`, (err, rows) => {
       if (!err) {
@@ -172,7 +172,7 @@ router.get('/SELanio_academico/', verifyToken, (req, res) => {
   
   
 //GET por codigo
-  router.get('/SELanio_academico/:COD_ANIO_ACADEMICO', verifyToken, (req, res) => {
+  router.get('/anio_academico/:COD_ANIO_ACADEMICO', verifyToken,  (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_ANIO_ACADEMICO } = req.params;
     const query = `
@@ -190,7 +190,7 @@ router.get('/SELanio_academico/', verifyToken, (req, res) => {
   });
 
   //Metodo Post
-router.post("/INSanio/", verifyToken, (req, res) => {
+router.post("/anio_academico", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -232,7 +232,7 @@ router.post("/INSanio/", verifyToken, (req, res) => {
      }
    });
 */
-router.put("/UPDanio", verifyToken, (req, res) => {
+router.put("/anio_academico", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -257,10 +257,10 @@ router.put("/UPDanio", verifyToken, (req, res) => {
 //MOTRAR DATOS DE LA TABLA NIVEL ACADEMICO
 router.get('/nivel_academico', verifyToken, (req, res) => {
     try {
-        jwt.verify(req.token, global.secretTokenAccess, (err) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
+      //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
+           // if (err) {
+            //    res.sendStatus(403);
+            //} else {
                 mysqlConnection.query(`Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','SA','1','1','1','null')`, (error, rows) => {
                     if (!error) {
                         res.status(200).json(rows[0]);
@@ -269,8 +269,8 @@ router.get('/nivel_academico', verifyToken, (req, res) => {
                         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
                     }
                 });
-            }
-        })
+         //   }
+       // })
     } catch (error) {
         res.send(error);
     }
@@ -304,7 +304,7 @@ router.get("/nivel_academico/:COD_NIVEL_ACADEMICO", verifyToken, (req, res) => {
 });
 
 //Metodo post
-router.post("/nuevo_nivel", verifyToken, (req, res) => {
+router.post("/nivel_academico", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
@@ -359,12 +359,12 @@ router.post("/nuevo_nivel", verifyToken, (req, res) => {
 
    /******************** SECCIONES *************************/
    //MOTRAR DATOS DE LA TABLA SECCIONES
-router.get('/Secciones/', verifyToken, (req, res) => {
+router.get('/Secciones', verifyToken, (req, res) => {
     try {
-        jwt.verify(req.token, global.secretTokenAccess, (err) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
+      //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+          //      res.sendStatus(403);
+           // } else {
                 mysqlConnection.query(`Call SP_moduloAcademico('MA_SECCIONES','SA','1','1','1','null')`, (err, rows) => {
                     if (!err) {
                         res.status(200).json(rows[0]);
@@ -373,8 +373,8 @@ router.get('/Secciones/', verifyToken, (req, res) => {
                         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
                     }
                 });
-            }
-        });
+           // }
+       // });
     } catch (error) {
         res.send(error);
     }
@@ -405,7 +405,7 @@ router.get("/Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
 });
 
    //Metodo Post/INSERTAR
-router.post("/nueva_seccion/", verifyToken, (req, res) => {
+router.post("/Secciones", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
