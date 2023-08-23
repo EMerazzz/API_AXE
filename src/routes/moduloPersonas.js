@@ -96,7 +96,7 @@ router.post("/personas", verifyToken, (req, res) => {
 
 /*************************TABLA MP_CORREOS ************************** */
 // Ruta para mostrar datos de la tabla de correos
-router.get('/correos', /*verifyToken,*/ (req, res) => {
+router.get('/correos', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     mysqlConnection.query(`Call SP_MP_PERSONAS('MP_CORREOS','SA','1','1','null','null','null','null','null','1','2015-5-14', null)`, (err, rows) => {
@@ -110,7 +110,7 @@ router.get('/correos', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para mostrar datos de un correo por código
-  router.get("/correos/:COD_CORREO", /*verifyToken,*/ (req, res) => {
+  router.get("/correos/:COD_CORREO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -130,12 +130,12 @@ router.get('/correos', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para agregar un nuevo correo
-  router.post("/correos", /*verifyToken,*/ (req, res) => {
+  router.post("/correos", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_PERSONA, CORREO_ELECTRONICO } = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','I','${COD_PERSONA}','null','${CORREO_ELECTRONICO}','NULL','NULL','NULL','NULL','10','2010-5-10', null)`;
+      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','I','${COD_PERSONA}','1','${CORREO_ELECTRONICO}','NULL','NULL','NULL','NULL','10','2010-5-10', null)`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -152,7 +152,7 @@ router.get('/correos', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para modificar un correo existente
-  router.put("/correos/:COD_CORREO", /*verifyToken,*/ (req, res) => {
+  router.put("/correos/:COD_CORREO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -176,7 +176,7 @@ router.get('/correos', /*verifyToken,*/ (req, res) => {
   
 /************************* TABLA telefonos ***************************/
 // Ruta para mostrar datos de la tabla de telefonos
-router.get('/telefonos', /*verifyToken,*/ (req, res) => {
+router.get('/telefonos', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     mysqlConnection.query(`Call SP_MP_PERSONAS('MP_TELEFONOS','SA','1','1','null','null','null','null','null','1','2015-5-14', null)`, (err, rows) => {
@@ -190,7 +190,7 @@ router.get('/telefonos', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para mostrar datos de un telefono por código
-  router.get("/telefonos/:COD_TELEFONO", /*verifyToken,*/ (req, res) => {
+  router.get("/telefonos/:COD_TELEFONO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -210,7 +210,7 @@ router.get('/telefonos', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para agregar un nuevo telefono
-  router.post("/telefonos", /*verifyToken,*/ (req, res) => {
+  router.post("/telefonos", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -232,7 +232,7 @@ router.get('/telefonos', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para modificar un telefono existente
-  router.put("/telefonos/:COD_TELEFONO", /*verifyToken,*/ (req, res) => {
+  router.put("/telefonos/:COD_TELEFONO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -256,7 +256,7 @@ router.get('/telefonos', /*verifyToken,*/ (req, res) => {
   
 /*************************TABLA CONTACTOS EMERGENCIA ************************** */
 // Ruta para mostrar datos de la tabla de contactos de emergencia
-router.get('/contacto_emergencia', /*verifyToken,*/ (req, res) => {
+router.get('/contacto_emergencia', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     mysqlConnection.query(`Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','SA','1','1','null','null','null','null','null','1','2015-5-14', null)`, (err, rows) => {
@@ -290,7 +290,7 @@ router.get('/contacto_emergencia', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para agregar un nuevo contacto de emergencia
-  router.post("/contacto_emergencia", /*verifyToken,*/ (req, res) => {
+  router.post("/contacto_emergencia", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -312,7 +312,7 @@ router.get('/contacto_emergencia', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para modificar un contacto de emergencia existente
-  router.put("/contacto_emergencia/:COD_CONTACTO_EMERGENCIA", /*verifyToken,*/ (req, res) => {
+  router.put("/contacto_emergencia/:COD_CONTACTO_EMERGENCIA", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -338,7 +338,7 @@ router.get('/contacto_emergencia', /*verifyToken,*/ (req, res) => {
 
 /*************************TABLA DIRECCIONES ************************** */
 // Ruta para mostrar datos de la tabla de direcciones
-router.get('/direcciones', /*verifyToken,*/ (req, res) => {
+router.get('/direcciones', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     mysqlConnection.query(`Call SP_MP_PERSONAS('MP_DIRECCIONES','SA','1','1','null','null','null','null','null','1','2015-5-14', null)`, (err, rows) => {
@@ -352,12 +352,12 @@ router.get('/direcciones', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para mostrar datos de una dirección por código
-  router.get("/direcciones/:COD_DIRECCION", /*verifyToken,*/ (req, res) => {
+  router.get("/direcciones/:COD_DIRECCION", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_DIRECCION } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','SO','${COD_DIRECCION}','1','null','null','null','null','null','1','2015-5-14', null)`;
+      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','SO','${COD_DIRECCION}','1',null,'null','null','null','null','1','2015-5-14', null)`;
       mysqlConnection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -372,7 +372,7 @@ router.get('/direcciones', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para agregar una nueva dirección
-  router.post("/direcciones", /*verifyToken,*/ (req, res) => {
+  router.post("/direcciones", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -394,7 +394,7 @@ router.get('/direcciones', /*verifyToken,*/ (req, res) => {
   });
   
   // Ruta para modificar una dirección existente
-  router.put("/direcciones/:COD_DIRECCION", /*verifyToken,*/ (req, res) => {
+  router.put("/direcciones/:COD_DIRECCION", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
