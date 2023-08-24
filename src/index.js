@@ -4,7 +4,7 @@ const app = express();
 
 // Settings
 //*Habilito el 4000, solo de manera local, cuando pase a produccion pasar a puerto 4000
-app.set('port', process.env.PORT || 4000);
+app.set('port', process.env.PORT || 80);
 
 // Middlewares
 app.use(express.json());
