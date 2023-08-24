@@ -17,8 +17,8 @@ const mysqlConnection = mysql.createConnection({
   password: 'ALIEDU##23aa',
   database: 'ALIEDU',
   multipleStatements: true
-});
-*/
+});*/
+
 
 const mysqlConnection = mysql.createConnection({
   host: '82.180.162.18',
