@@ -204,14 +204,14 @@ router.post('/permisos', verifyToken, (req, res) => {
 /*********************************** TABLA MS_PREGUNTAS_CONTRASENA ***************************** */
 //MOTRAR DATOS DE LA TABLA
 
-router.get('/pregunta_contrasenia', verifyToken, (req, res) => {
+router.get('/pregunta_usuario', verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTAS_CONTRASENA', 'SA', 1, 1, 1, 1, 1, 1,  '1','1', '1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SA', 0, 1, 0, 0, 0, 0, '¿Equipo Favortito?', 'Real Madrid', '')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -229,7 +229,7 @@ router.get('/pregunta_contrasenia', verifyToken, (req, res) => {
 
 
 //Mostrar datos por codigo
-router.get("/pregunta_contrasenia/:COD_PREGUNTA", verifyToken, (req, res) => {
+router.get("/pregunta_usuario/:COD_PREGUNTA", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
@@ -237,7 +237,8 @@ router.get("/pregunta_contrasenia/:COD_PREGUNTA", verifyToken, (req, res) => {
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
                 const { COD_PREGUNTA } = req.params;
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTAS_CONTRASENA', 'SO', '${COD_PREGUNTA}', 1, 1, 1, 1, 1,  '1','1', '1')`;
+
+                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SA', '${COD_PREGUNTA}', 1, 0, 0, 0, 0, '', '', '')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -254,7 +255,7 @@ router.get("/pregunta_contrasenia/:COD_PREGUNTA", verifyToken, (req, res) => {
 });
 
 //Insertar un registro
-router.post('/pregunta_contrasenia', verifyToken, (req, res) => {
+router.post('/pregunta_usuario', verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
@@ -266,8 +267,8 @@ router.post('/pregunta_contrasenia', verifyToken, (req, res) => {
             SET @PREGUNTA = ?;
             SET @RESPUESTA = ?;
             SET @COD_USUARIO = ?;
-      
-            CALL SP_moduloseguridad('MS_PREGUNTAS_CONTRASENA', 'I', 1, @COD_USUARIO, 1, 1, 1, 1, @PREGUNTA, @RESPUESTA, '1')
+                
+            CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'I', 1, @COD_USUARIO, 0, 0, 0, 0, @PREGUNTA, @RESPUESTA, '')
           `;
                 mysqlConnection.query(query, [PREGUNTA, RESPUESTA, COD_USUARIO], (err, rows, fields) => {
                     if (!err) {
@@ -285,7 +286,7 @@ router.post('/pregunta_contrasenia', verifyToken, (req, res) => {
 
 
 //Actualizar registro
-router.put('/pregunta_contrasenia/:COD_PREGUNTA', verifyToken, (req, res) => {
+router.put('/pregunta_usuario/:COD_PREGUNTA', verifyToken, (req, res) => {
     try {
       jwt.verify(req.token, global.secretTokenAccess, (err) => {
         if (err) {
@@ -296,7 +297,7 @@ router.put('/pregunta_contrasenia/:COD_PREGUNTA', verifyToken, (req, res) => {
           const { COD_PREGUNTA } = req.params;
   
           mysqlConnection.query(
-              "CALL SP_moduloseguridad('MS_PREGUNTAS_CONTRASENA', 'U', ?, 1, 1, 1, 1, 1,  ?, ? , '1')",
+              "CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'U', ?, 0, 0, 0, 0, 0, ?, ?, '1')",
               [COD_PREGUNTA, PREGUNTA, RESPUESTA],
               (err, rows, fields) => {
                   if (!err) {
