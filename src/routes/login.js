@@ -60,7 +60,7 @@ router.post('/usuario_contrasena', (req, res) => {
 
 router.post('/cambiarContrasena', (req, res) => {
   const { USUARIO, CONTRASENA} = req.body;
-
+  
    mysqlConnection.query("CALL MS_cambiarContrasena(?,?)",  [USUARIO, CONTRASENA], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Error interno del servidor' });
