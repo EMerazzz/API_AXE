@@ -9,7 +9,7 @@ const mysql = require ('mysql2');
   database: 'AXE',
   multipleStatements: true
 });*/
-
+/*
 const mysqlConnection = mysql.createConnection({
   host: '142.44.161.115',
   port: 3306,
@@ -18,7 +18,8 @@ const mysqlConnection = mysql.createConnection({
   database: 'ALIEDU',
   multipleStatements: true
 });
-/*
+*/
+
 const mysqlConnection = mysql.createConnection({
   host: '82.180.162.18',
   port: 3306,
@@ -27,7 +28,7 @@ const mysqlConnection = mysql.createConnection({
   database: 'axe',
   multipleStatements: true
 });
-*/
+
 //Esto es para trabajar con mi BD de manera local, quitar, cuando se conecta al servidor remoto
 
 mysqlConnection.connect(function (err) {
