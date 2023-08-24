@@ -29,7 +29,8 @@ app.use(require('./routes/moduloDocentes'));
 app.use(require('./routes/login'));
 
 // Starting the server
-app.listen(app.get('port'), () => {
-  console.log(`Server on port ${app.get('port')}`);
+// Starting the server
+app.listen(app.get('port'), '0.0.0.0', () => {
+  console.log(`Server listening on port ${app.get('port')}`);
 });
 
