@@ -165,26 +165,34 @@ router.get('/docentes_asignaturas', verifyToken,  (req, res) => {
   
   });//FIN DEL POST PARA INSERTAR EN MD_DOCENTES_ASIGNATURAS
   
-    //UPDATE DE LA TABLA  MDA_DOCENTES_ASIGNATURAS
-    router.put('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  verifyToken, (req, res) => {
-              // Verificación de JWT ya realizada por el middleware verifyToken
-      const { COD_DOCENTE_ASIGNATURA } = req.params;
-      const {COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES} = req.body;
-      const query = `
-      
-      CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS','U',?,?,?,?,'0','0','0') ;
-      `;
-      mysqlConnection.query(query, [COD_DOCENTE_ASIGNATURA,COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES], (err, rows, fields) => {
-          if(!err) {
-            res.json({status: 'DOCENTE_ASIGNATURA Actualizado'});
-          } else {
-            console.log(err);
-          }
-      });
-  
-    });//fin put de actualizar en la tabla mda_docentes_asignaturas
-  
-  
+   //Metodo put
+router.put("/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA", verifyToken, (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
 
+  try {
+    const { COD_DOCENTE_ASIGNATURA } = req.params;
+    const {
+    COD_ASIGNATURA,HORAS_SEMANALES
+    } = req.body;
+
+    const sql = `call axe.SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'U', ${COD_DOCENTE_ASIGNATURA}, ${COD_ASIGNATURA},1, ${HORAS_SEMANALES}, '1', '1', '1');`;
+    mysqlConnection.query(sql, (error) => {
+      if (!error) {
+        res.json({
+          Status: " Modificado"
+        });
+      } else {
+        console.log(error);
+        res.sendStatus(500);
+      }
+    });
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 module.exports = router;
+  
+
+
+

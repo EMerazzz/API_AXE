@@ -18,7 +18,7 @@ app.use(require('./routes/moduloPersonas'));
 //modulo matricula
 app.use(require('./routes/moduloMatricula'));
 //modulo estudiantes
-app.use(require('./routes/moduloEstudiantes'));
+app.use(require('./routes/moduloPadres'));
 // modulo academico
 app.use(require('./routes/moduloAcademico'));
 // modulo seguridad
