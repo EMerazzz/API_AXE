@@ -229,25 +229,27 @@ router.get('/pregunta_usuario', verifyToken, (req, res) => {
 
 
 //Mostrar datos por codigo
-router.get("/pregunta_usuario/:COD_PREGUNTA", verifyToken, (req, res) => {
+router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
     try {
+        /*
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
                 res.sendStatus(403);
-            } else {
+            } else {*/
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const { COD_PREGUNTA } = req.params;
-
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SA', '${COD_PREGUNTA}', 1, 0, 0, 0, 0, '', '', '')`;
+                const { USUARIO } = req.body;
+                console.log(USUARIO);
+                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SO', '1', 1, 0, 0, 0, 0, '${USUARIO}', '', '')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
                         res.status(200).json(results[0]);
-                    } else {
+                    } /*else {
                         res.send(error);
                     }
+
                 });
-            }
+            }*/
         });
     } catch (error) {
         res.send(error);

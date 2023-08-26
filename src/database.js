@@ -19,7 +19,6 @@ const mysqlConnection = mysql.createConnection({
   multipleStatements: true
 });*/
 
-
 const mysqlConnection = mysql.createConnection({
   host: '82.180.162.18',
   port: 3306,
