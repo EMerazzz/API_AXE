@@ -11,7 +11,7 @@ const verifyToken = require('./verify');
 router.get('/estudiantes', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`Call SP_moduloEstudiantes('ME_ESTUDIANTES','SA','1','1','1','null','null','null','null')`, (err, rows) => {
+    mysqlConnection.query(`Call SP_moduloEstudiantes('ME_ESTUDIANTES','SA','1','1','1','null','null','null','null','null')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -93,7 +93,7 @@ router.post("/estudiantes", verifyToken, (req, res) => {
 router.get('/padres_tutores', verifyToken,(req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`call SP_moduloPadres('ME_PADRES_TUTORES', 'SA', 1, 1, '1', '1', '1', '1');`, (err, rows) => {
+    mysqlConnection.query(`call SP_moduloPadres('ME_PADRES_TUTORES', 'SA', 1, 1, '1', '1', '1', '1','1');`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -111,7 +111,7 @@ router.get("/padres_tutores/:COD_PADRE_TUTOR", verifyToken, (req, res) => {
   
     try {
       const { COD_PADRE_TUTOR } = req.params;
-      const sql = `Call SP_moduloPadres('ME_PADRES_TUTORES','SO','${COD_PADRE_TUTOR}','1','null','null','null','null')`;
+      const sql = `Call SP_moduloPadres('ME_PADRES_TUTORES','SO','${COD_PADRE_TUTOR}','1','null','null','null','null','null')`;
       mysqlConnection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -140,7 +140,7 @@ router.post("/padres_tutores", verifyToken, (req, res) => {
         RELACION_PADRE_ESTUDIANTE
       } = req.body;
   
-      const sql = `Call SP_moduloPadres('ME_PADRES_TUTORES','I',1,'${COD_PERSONA}','${NOMBRE_PADRE_TUTOR}','${APELLIDO_PADRE_TUTOR}','${OCUPACION_PADRE_TUTOR}','${RELACION_PADRE_ESTUDIANTE}')`;
+      const sql = `Call SP_moduloPadres('ME_PADRES_TUTORES','I',1,'${COD_PERSONA}','${NOMBRE_PADRE_TUTOR}','${APELLIDO_PADRE_TUTOR}','${OCUPACION_PADRE_TUTOR}','${RELACION_PADRE_ESTUDIANTE}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -167,10 +167,11 @@ router.put("/padres_tutores/:COD_PADRE_TUTOR", verifyToken, (req, res) => {
         NOMBRE_PADRE_TUTOR,
         APELLIDO_PADRE_TUTOR,
         OCUPACION_PADRE_TUTOR,
-        RELACION_PADRE_ESTUDIANTE
+        RELACION_PADRE_ESTUDIANTE,
+        usuarioModificador
       } = req.body;
   
-      const sql = `call SP_moduloPadres('ME_PADRES_TUTORES', 'UP', ${COD_PADRE_TUTOR}, 1, '1', '1', '${OCUPACION_PADRE_TUTOR}', '${RELACION_PADRE_ESTUDIANTE}');`;
+      const sql = `call SP_moduloPadres('ME_PADRES_TUTORES', 'UP', ${COD_PADRE_TUTOR}, 1, '1', '1', '${OCUPACION_PADRE_TUTOR}', '${RELACION_PADRE_ESTUDIANTE}','${usuarioModificador}');`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
