@@ -83,7 +83,7 @@ router.put("/asignaturas/:COD_ASIGNATURA", verifyToken,(req, res) => {
 
    /******************** JORNADAS *************************/
 //MOTRAR DATOS DE LA TABLA JORNADAS
-router.get('/jornadas/', verifyToken, (req, res) => { 
+router.get('/jornadas', verifyToken, (req, res) => { 
     mysqlConnection.query(`Call SP_moduloAcademico('MA_JORNADA','SA','1','1','1','null')`, (err, rows) => {
         if (!err) {
             res.status(200).json(rows[0]);
@@ -113,7 +113,7 @@ router.get("/jornadas/:COD_JORNADA", verifyToken, (req, res) => {
 });
 
   //Metodo Post
-router.post("/jornadas/", verifyToken, (req, res) => {
+router.post("/jornadas", verifyToken, (req, res) => {
     try {
         const { DESCRIPCION_JOR } = req.body;
         const sql = `Call SP_moduloAcademico('MA_JORNADA','I','1','1','1','${DESCRIPCION_JOR}')`;
