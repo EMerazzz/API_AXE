@@ -232,7 +232,33 @@ router.post("/anio_academico", verifyToken, (req, res) => {
      }
    });
 */
-router.put("/anio_academico", verifyToken, (req, res) => {
+   //Metodo put
+   router.put("/anio_academico/:COD_ANIO_ACADEMICO", verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                const { COD_ANIO_ACADEMICO } = req.params;
+                const { descripcion } = req.body;
+                const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','U','${COD_ANIO_ACADEMICO}','1','1','${descripcion}')`;
+                mysqlConnection.query(sql, error => {
+                    if (!error) {
+                        res.json({
+                            Status: "Año Academico Modificado"
+                        });
+                    } else {
+                        console.log(error);
+                        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+/* router.put("/anio_academico", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -251,7 +277,7 @@ router.put("/anio_academico", verifyToken, (req, res) => {
     } catch (error) {
       res.send(error);
     }
-  });
+  }); */
   
    /******************** NIVEL ACADEMICO *************************/
 //MOTRAR DATOS DE LA TABLA NIVEL ACADEMICO
