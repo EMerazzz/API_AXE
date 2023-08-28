@@ -457,6 +457,37 @@ router.get("/usuarios/:COD_USUARIO", verifyToken, (req, res) => {
     }
 });
 
+//Insertar Usuario
+router.post('/usuarios', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que actualiza el registro
+                const { USUARIO, CONTRASENA, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO } = req.body;
+                //const { COD_USUARIO } = req.params;
+
+                mysqlConnection.query(
+                    "CALL SP_moduloseguridad('MS_USUARIOS', 'I', 1, 0, ?, ?, 1, 1, ?, ? , ?)",
+                    [COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR],
+                    (err, rows, fields) => {
+                        if (!err) {
+                            // Retornar lo actualizado
+                            res.status(200).json(req.body);
+                        } else {
+                            console.log(err);
+                        }
+                    }
+                );
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
 //Actualizar registro
 router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
     try {
