@@ -257,12 +257,12 @@ router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
 });
 
 //Insertar un registro
-router.post('/pregunta_usuario', verifyToken, (req, res) => {
+router.post('/pregunta_usuario', /*verifyToken,*/ (req, res) => {
     try {
-        jwt.verify(req.token, global.secretTokenAccess, (err) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
+        //jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+             //   res.sendStatus(403);
+            //} else {
                 // Resto del código que realiza la inserción de la pregunta de contraseña
                 const { PREGUNTA, RESPUESTA, COD_USUARIO } = req.body;
                 const query = `
@@ -279,12 +279,66 @@ router.post('/pregunta_usuario', verifyToken, (req, res) => {
                         console.log(err);
                     }
                 });
-            }
-        });
+          //  }
+      //  });
     } catch (error) {
         res.send(error);
     }
 });
+
+router.post('/dame_cod_usuario', /*verifyToken,*/ (req, res) => {
+    try {
+        //jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+             //   res.sendStatus(403);
+            //} else {
+                // Resto del código que realiza la inserción de la pregunta de contraseña
+                const { USUARIO } = req.body;
+                const query = `
+            SET @USUARIO = ?;
+                
+            CALL MS_CODIGO_USUARIO(@USUARIO)
+          `;
+                mysqlConnection.query(query, [USUARIO], (err, results) => {
+                    if (!err) {
+                        res.status(200).json(results[1]);
+                    } else {
+                        console.log(err);
+                    }
+                });
+          //  }
+      //  });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+//Obtiene el numero de preguntas que tiene un usuario
+router.post('/cuenta_preguntas', /*verifyToken,*/ (req, res) => {
+    try {
+        //jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+             //   res.sendStatus(403);
+            //} else {
+                // Resto del código que realiza la inserción de la pregunta de contraseña
+                const { COD_USUARIO, USUARIO } = req.body;
+                const query = `                
+            CALL MS_CUENTA_PREGUNTAS(?, ?);
+          `;
+                mysqlConnection.query(query, [USUARIO, COD_USUARIO], (err, results) => {
+                    if (!err) {
+                        res.status(200).json(results[0][0]);
+                    } else {
+                        console.log(err);
+                    }
+                });
+          //  }
+      //  });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 
 
 //Actualizar registro
@@ -376,7 +430,6 @@ router.post('/roles', verifyToken, (req, res) => {
       if (!err) {
         res.json({ status: 'Estado de rol ingresado' });
       } else {
-        console.log(err);
         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
       }
     });

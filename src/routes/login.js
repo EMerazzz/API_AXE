@@ -90,5 +90,30 @@ router.post('/login', (req, res) => {
     }
   });
   
+  // Verificamos si es la primera vez que hace login
+  router.post('/primera_vez', (req, res) => {
+    try {
+      const { USUARIO } = req.body;
+  
+      mysqlConnection.query("CALL MS_PRIMER_INGRESO(?)", [USUARIO], (error, results) => {
+        if (error) {
+          res.status(500).json({ error: 'Error interno del servidor' });
+        } else {
+       
+          respuestaBD = results[0][0];
+          const cantidadPropiedades = Object.keys(respuestaBD).length;
+
+          if (cantidadPropiedades > 1) {
+            res.status(200).json(results[0]);
+            //La anterior instrucción muestra el token del usuario para poder usar las APIs.
+          } else {
+            res.status(200).json({});
+          }
+        }
+      });
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
 
   module.exports = router;
