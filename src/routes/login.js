@@ -116,4 +116,36 @@ router.post('/login', (req, res) => {
     }
   });
 
+
+  // Verificamos si es la primera vez que hace login
+  router.post('/acceso_permitido', (req, res) => {
+    try {
+      const { USUARIO } = req.body;
+  
+      mysqlConnection.query("CALL MS_ACCESO_PERMITIDO(?)", [USUARIO], (error, results) => {
+        if (error) {
+          res.status(500).json({ error: 'Error interno del servidor' });
+        } else {
+       
+          respuestaBD = results[0][0]['PERMITIDO'];
+          console.log(respuestaBD);
+          res.status(200).json(respuestaBD);
+         // const cantidadPropiedades = Object.keys(respuestaBD).length;
+
+          /*
+          if (cantidadPropiedades > 1) {
+            res.status(200).json(respuestaBD);
+            //La anterior instrucción muestra el token del usuario para poder usar las APIs.
+          } else {
+            res.status(200).json({});
+          }
+          */
+        }
+      });
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+
+
   module.exports = router;
