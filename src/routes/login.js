@@ -60,7 +60,7 @@ router.post('/login', (req, res) => {
             res.status(200).json(results[0]);
             //La anterior instrucción muestra el token del usuario para poder usar las APIs.
           } else {
-            res.status(400).json(respuestaBD);
+            res.status(400).json({});
           }
         }
       });
