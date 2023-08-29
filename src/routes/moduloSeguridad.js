@@ -517,4 +517,28 @@ router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
         res.send(error);
     }
 });
+//mostrar bitacora
+router.get('/bitacora', verifyToken, (req, res) => {
+    try {
+       jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
+                const consulta = `call axe.SP_MostrarBitacora('SA', 1);`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } else {
+                        res.send(error);
+                    }
+                });
+           }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 module.exports = router;
