@@ -135,7 +135,7 @@ router.get('/correos', verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, CORREO_ELECTRONICO ,USUARIO_MODIFICADOR} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','I','${COD_PERSONA}','1','${CORREO_ELECTRONICO}','1','1','1','10','2010-5-10','1','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','I','${COD_PERSONA}','1','${CORREO_ELECTRONICO}','1','1','1','10','2010-5-10','${USUARIO_MODIFICADOR}','1')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
