@@ -237,8 +237,8 @@ router.get('/telefonos', verifyToken, (req, res) => {
   
     try {
       const { COD_TELEFONO,USUARIO_MODIFICADOR } = req.params;
-      const { TELEFONO, TIPO_TELEFONO } = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','U','${COD_TELEFONO}','4','${TELEFONO}','${TIPO_TELEFONO}','null','null','null','10','2015-5-14','${USUARIO_MODIFICADOR}')`;
+      const { COD_PERSONA,TELEFONO, TIPO_TELEFONO } = req.body;
+      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','U','${COD_TELEFONO}','${COD_PERSONA}','${TELEFONO}','${TIPO_TELEFONO}','null','null','null','10','2015-5-14','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
