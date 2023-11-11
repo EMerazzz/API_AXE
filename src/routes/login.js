@@ -148,4 +148,24 @@ router.post('/login', (req, res) => {
   });
 
 
+// ver el numero de preguntas que se le solicitaran al usuario
+router.post('/preguntasSolicitadas', (req, res) => {
+  try {
+
+    mysqlConnection.query("CALL SP_MS_PARAMETROS_PREGUNTAS;", (error, results) => {
+      if (error) {
+        res.status(500).json({ error: 'Error interno del servidor' });
+      }else{
+        respuestaBD = results[0][0];
+  
+        //Respondemos el mensaje que nos responde la BD
+        res.status(200).json(respuestaBD);
+      }
+    });
+  } catch (catchError) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+
   module.exports = router;

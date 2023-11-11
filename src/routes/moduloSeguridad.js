@@ -257,6 +257,7 @@ router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
 });
 
 //Insertar un registro
+
 router.post('/pregunta_usuario', /*verifyToken,*/ (req, res) => {
     try {
         //jwt.verify(req.token, global.secretTokenAccess, (err) => {
@@ -273,6 +274,38 @@ router.post('/pregunta_usuario', /*verifyToken,*/ (req, res) => {
             CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'I', 1, @COD_USUARIO, 0, 0, 0, 0, @PREGUNTA, @RESPUESTA, '')
           `;
                 mysqlConnection.query(query, [PREGUNTA, RESPUESTA, COD_USUARIO], (err, rows, fields) => {
+                    if (!err) {
+                        res.json({ status: 'Pregunta de usuario/contraseña ingresada' });
+                    } else {
+                        console.log(err);
+                    }
+                });
+          //  }
+      //  });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
+// Esta quedara al final, eliminar la de arriba
+router.post('/usuario_pregunta', /*verifyToken,*/ (req, res) => {
+    try {
+        //jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+             //   res.sendStatus(403);
+            //} else {
+                // Resto del código que realiza la inserción de la pregunta de contraseña
+                // CALL SP_INSERT_MS_PREGUNTAS_SEGURIDAD(16, 8, 'Administrador de base de datos')
+                const { COD_PREGUNTA, COD_USUARIO,RESPUESTA } = req.body;
+                const query = `
+            SET @COD_PREGUNTA = ?;
+            SET @RESPUESTA = ?;
+            SET @COD_USUARIO = ?;
+                
+            CALL SP_INSERT_MS_PREGUNTAS_SEGURIDAD(@COD_USUARIO, @COD_PREGUNTA, @RESPUESTA);
+          `;
+                mysqlConnection.query(query, [COD_PREGUNTA, RESPUESTA,  COD_USUARIO], (err, rows, fields) => {
                     if (!err) {
                         res.json({ status: 'Pregunta de usuario/contraseña ingresada' });
                     } else {
@@ -593,5 +626,27 @@ router.get('/bitacora', verifyToken, (req, res) => {
         res.send(error);
     }
 });
+
+// CALL SP_MS_PREGUNTAS_SEGURIDAD('GERMAN');
+
+// ******************* Preguntas de seguridad
+//Mostrar datos por codigo
+router.post("/preguntaUsuario/", /*verifyToken,*/ (req, res) => {
+    try {
+                const { USUARIO } = req.body;
+                console.log(USUARIO);
+                const consulta = `CALL SP_MS_PREGUNTAS_SEGURIDAD('${USUARIO}')`;
+                //const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SO', '1', 1, 0, 0, 0, 0, '${USUARIO}', '', '')`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } 
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 
 module.exports = router;
