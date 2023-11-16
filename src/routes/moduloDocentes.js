@@ -5,7 +5,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const verifyToken = require('./verify');
 const mysqlConnection = require('../database');
-/******************************* TABLA DOCENTES *************************** */
+/******************************* TABLA DOCENTES *****************************/
 /*
          COD_DOCENTE = parametroBI,
          COD_PERSONA = parametroBI1,

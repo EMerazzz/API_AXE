@@ -24,7 +24,7 @@ router.get('/estudiantes', verifyToken, (req, res) => {
 
 //GET por codigo
 router.get("/estudiantes/:COD_ESTUDIANTE", verifyToken, (req, res) => {
-    // Verificación de JWT ya realizada por el middleware verifyToken
+    // Verificación de JWT ya realizada por el middleware verifyTokens
   
     try {
       const { COD_ESTUDIANTE } = req.params;

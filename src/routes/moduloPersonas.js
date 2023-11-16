@@ -336,7 +336,7 @@ router.get('/contacto_emergencia', verifyToken, (req, res) => {
   
 //MOTRAR DATOS DE LA TABLA
 
-/*************************TABLA DIRECCIONES ************************** */
+/*************************TABLA DIRECCIONES ****************************/
 // Ruta para mostrar datos de la tabla de direcciones
 router.get('/direcciones', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken

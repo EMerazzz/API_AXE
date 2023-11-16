@@ -5,7 +5,7 @@ const mysqlConnection = require('../database');
 
 const jwt = require('jsonwebtoken')
 const verifyToken = require('./verify');
-/*************************TABLA PERSONAS ************************** */
+/*************************TABLA PERSONAS ****************************/
 //MOTRAR DATOS DE LA TABLA DE ASIGNATURAS
 router.get('/matricula', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken

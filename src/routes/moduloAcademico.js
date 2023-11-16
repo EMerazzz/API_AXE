@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const verifyToken = require('./verify');
 
 const mysqlConnection = require('../database');
-/******************** ASIGNATURAS *************************/
+/******************** ASIGNATURAS **************************/
 //MOTRAR DATOS DE LA TABLA DE ASIGNATURAS
 router.get('/asignaturas', verifyToken, (req, res) => { 
 
