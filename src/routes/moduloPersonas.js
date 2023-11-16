@@ -15,7 +15,7 @@ router.get('/personas', verifyToken, (req, res) => {
         //   if (err) {
          //      res.sendStatus(403);
           //  } else {
-    mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0', '1')`, (err, rows) => {
+    mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -32,7 +32,7 @@ router.get('/personas', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     const { COD_PERSONA } = req.params;
-    const sql = `Call SP_MP_PERSONAS('MP_PERSONAS', 'SO',${COD_PERSONA}, NULL, 'JoQQQhn', 'Doe', '1277AA3456789', 'M', 'Cliente', 30, '1990-01-01','Cliente', '1')`;
+    const sql = `Call SP_MP_PERSONAS('MP_PERSONAS', 'SO',${COD_PERSONA}, NULL, 'JoQQQhn', 'Doe', '1277AA3456789', 'M', 'Cliente', 30, '1990-01-01','Cliente')`;
   
     mysqlConnection.query(sql, (error, results) => {
       if (error) {
@@ -54,7 +54,7 @@ router.post("/personas", verifyToken, (req, res) => {
     try {
       
       const { NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,USUARIO_MODIFICADOR, Estado_registro } = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','I',0,'0','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','I',0,'0','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -77,7 +77,7 @@ router.post("/personas", verifyToken, (req, res) => {
     try {
       const { COD_PERSONA } = req.params;
       const {  NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA ,USUARIO_MODIFICADOR, Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','U','${COD_PERSONA}','1','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','U','${COD_PERSONA}','1','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -99,7 +99,7 @@ router.post("/personas", verifyToken, (req, res) => {
 router.get('/correos', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_CORREOS','SA','1','1','null','null','null','null','null','1','2015-5-14','null', '1')`, (err, rows) => {
+    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_CORREOS','SA','1','1','null','null','null','null','null','1','2015-5-14','null')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -115,7 +115,7 @@ router.get('/correos', verifyToken, (req, res) => {
   
     try {
       const { COD_CORREO } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','SO','${COD_CORREO}','1','null','null','null','null','null','1','2015-5-14','null','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','SO','${COD_CORREO}','1','null','null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -135,7 +135,7 @@ router.get('/correos', verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, CORREO_ELECTRONICO ,USUARIO_MODIFICADOR, Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','I','${COD_PERSONA}','1','${CORREO_ELECTRONICO}','1','1','1','10','1','2010-5-10','${USUARIO_MODIFICADOR}', '1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','I','${COD_PERSONA}','1','${CORREO_ELECTRONICO}','1','1','1','10','1','2010-5-10','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -158,7 +158,7 @@ router.get('/correos', verifyToken, (req, res) => {
     try {
       const { COD_CORREO } = req.params;
       const { COD_PERSONA, CORREO_ELECTRONICO ,USUARIO_MODIFICADOR, Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','U','${COD_CORREO}','${COD_PERSONA}','${CORREO_ELECTRONICO}','null','null','null','null','10','2015-5-14','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','U','${COD_CORREO}','${COD_PERSONA}','${CORREO_ELECTRONICO}','null','null','null','null','10','2015-5-14','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -179,7 +179,7 @@ router.get('/correos', verifyToken, (req, res) => {
 router.get('/telefonos', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_TELEFONOS','SA','1','1','null','null','null','null','null','1','2015-5-14','null','1')`, (err, rows) => {
+    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_TELEFONOS','SA','1','1','null','null','null','null','null','1','2015-5-14','null')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -195,7 +195,7 @@ router.get('/telefonos', verifyToken, (req, res) => {
   
     try {
       const { COD_TELEFONO } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','SO','${COD_TELEFONO}','1','null','null','null','null','null','1','2015-5-14','null','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','SO','${COD_TELEFONO}','1','null','null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -215,7 +215,7 @@ router.get('/telefonos', verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, TELEFONO, TIPO_TELEFONO,USUARIO_MODIFICADOR, Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','I','${COD_PERSONA}',1,'${TELEFONO}','${TIPO_TELEFONO}','NULL','NULL','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','I','${COD_PERSONA}',1,'${TELEFONO}','${TIPO_TELEFONO}','NULL','NULL','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -238,7 +238,7 @@ router.get('/telefonos', verifyToken, (req, res) => {
     try {
       const { COD_TELEFONO} = req.params;
       const { COD_PERSONA,TELEFONO, TIPO_TELEFONO,USUARIO_MODIFICADOR,Estado_registro } = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','U','${COD_TELEFONO}','${COD_PERSONA}','${TELEFONO}','${TIPO_TELEFONO}','NULL','NULL','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','U','${COD_TELEFONO}','${COD_PERSONA}','${TELEFONO}','${TIPO_TELEFONO}','NULL','NULL','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -259,7 +259,7 @@ router.get('/telefonos', verifyToken, (req, res) => {
 router.get('/contacto_emergencia', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','SA','1','1','null','null','null','null','null','1','2015-5-14','null','1')`, (err, rows) => {
+    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','SA','1','1','null','null','null','null','null','1','2015-5-14','null')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -275,7 +275,7 @@ router.get('/contacto_emergencia', verifyToken, (req, res) => {
   
     try {
       const { COD_CONTACTO_EMERGENCIA } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','SO','${COD_CONTACTO_EMERGENCIA}','1','null','null','null','null','null','1','2015-5-14','null','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','SO','${COD_CONTACTO_EMERGENCIA}','1','null','null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -295,7 +295,7 @@ router.get('/contacto_emergencia', verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO, RELACION,USUARIO_MODIFICADOR,Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','I','${COD_PERSONA}','1','${NOMBRE_CONTACTO}','${APELLIDO_CONTACTO}','${TELEFONO}','${RELACION}','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','I','${COD_PERSONA}','1','${NOMBRE_CONTACTO}','${APELLIDO_CONTACTO}','${TELEFONO}','${RELACION}','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -318,7 +318,7 @@ router.get('/contacto_emergencia', verifyToken, (req, res) => {
     try {
       const { COD_CONTACTO_EMERGENCIA } = req.params;
       const { COD_PERSONA, NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO, RELACION,USUARIO_MODIFICADOR,Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','U','${COD_CONTACTO_EMERGENCIA}','${COD_PERSONA}','${NOMBRE_CONTACTO}','${APELLIDO_CONTACTO}','${TELEFONO}','${RELACION}','null','10','2015-5-14','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','U','${COD_CONTACTO_EMERGENCIA}','${COD_PERSONA}','${NOMBRE_CONTACTO}','${APELLIDO_CONTACTO}','${TELEFONO}','${RELACION}','null','10','2015-5-14','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -341,7 +341,7 @@ router.get('/contacto_emergencia', verifyToken, (req, res) => {
 router.get('/direcciones', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_DIRECCIONES','SA','1','1','null','null','null','null','null','1','2015-5-14','null','1')`, (err, rows) => {
+    mysqlConnection.query(`Call SP_MP_PERSONAS('MP_DIRECCIONES','SA','1','1','null','null','null','null','null','1','2015-5-14','null')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -357,7 +357,7 @@ router.get('/direcciones', verifyToken, (req, res) => {
   
     try {
       const { COD_DIRECCION } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','SO','${COD_DIRECCION}','1',null,'null','null','null','null','1','2015-5-14','null','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','SO','${COD_DIRECCION}','1',null,'null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.length > 0) {
@@ -377,7 +377,7 @@ router.get('/direcciones', verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,USUARIO_MODIFICADOR,Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','I',${COD_PERSONA},'1','${DIRECCION}','${DEPARTAMENTO}','${CIUDAD}','${PAIS}','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','I',${COD_PERSONA},'1','${DIRECCION}','${DEPARTAMENTO}','${CIUDAD}','${PAIS}','NULL','10','2010-5-10','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -400,7 +400,7 @@ router.get('/direcciones', verifyToken, (req, res) => {
     try {
       const { COD_DIRECCION } = req.params;
       const { COD_PERSONA, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS ,USUARIO_MODIFICADOR,Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','U','${COD_DIRECCION}','${COD_PERSONA}','${DIRECCION}','${DEPARTAMENTO}','${CIUDAD}','${PAIS}','null','10','2015-5-14','${USUARIO_MODIFICADOR}','1')`;
+      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','U','${COD_DIRECCION}','${COD_PERSONA}','${DIRECCION}','${DEPARTAMENTO}','${CIUDAD}','${PAIS}','null','10','2015-5-14','${USUARIO_MODIFICADOR}'`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({

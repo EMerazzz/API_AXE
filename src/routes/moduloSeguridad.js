@@ -17,7 +17,7 @@ router.get('/estado_usuario', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta
-                const consulta = `CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'SA', 1, 1, 1, 1, 1, 1,  '1','1', '1','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'SA', 1, 1, 1, 1, 1, 1,  '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -70,7 +70,7 @@ router.post('/estado_usuario', verifyToken, (req, res) => {
                 const { DESCRIPCION } = req.body;
                 const query = `
             SET @DESCRIPCION = ?;
-            CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION,'1', '1','1')
+            CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION,'1', '1')
           `;
                 mysqlConnection.query(query, [DESCRIPCION], (err, rows, fields) => {
                     if (!err) {
@@ -98,7 +98,7 @@ router.put('/estado_usuario/:COD_ESTADO_USUARIO', verifyToken, (req, res) => {
                 const { COD_ESTADO_USUARIO } = req.params;
 
                 mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'U', ?, 1, 1, 1, 1, 1,  ?, '1' , '1','1')",
+                    "CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'U', ?, 1, 1, 1, 1, 1,  ?, '1' , '1')",
                     [COD_ESTADO_USUARIO, DESCRIPCION,Estado_registro],
                     (err, rows, fields) => {
                         if (!err) {
@@ -126,7 +126,7 @@ router.get('/permisos', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta
-                const consulta = `CALL SP_moduloseguridad('MS_PERMISOS', 'SA', 1, 1, 1, 1, 1, 1, '1','1', '1','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_PERMISOS', 'SA', 1, 1, 1, 1, 1, 1, '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -152,7 +152,7 @@ router.get("/permisos/:COD_PERMISO", verifyToken, (req, res) => {
             } else {
                 // Resto del código que realiza la consulta
                 const { COD_PERMISO } = req.params;
-                const consulta = `CALL SP_moduloseguridad('MS_PERMISOS', 'SO', '${COD_PERMISO}', 1, 1, 1, 1, 1,  '1','1', '1','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_PERMISOS', 'SO', '${COD_PERMISO}', 1, 1, 1, 1, 1,  '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -185,7 +185,7 @@ router.post('/permisos', verifyToken, (req, res) => {
             SET @MODIFICADO_POR = ?;
             SET @COD_ROL = ?;
   
-            CALL SP_moduloseguridad('MS_PERMISOS', 'I', 1, @COD_ROL, @PERMISO_INSERCION, @PERMISO_ELIMINACION,  @PERMISO_ACTUALIZACION, @PERMISO_CONSULTAR,  @MODIFICADO_POR, '1', '1','1')
+            CALL SP_moduloseguridad('MS_PERMISOS', 'I', 1, @COD_ROL, @PERMISO_INSERCION, @PERMISO_ELIMINACION,  @PERMISO_ACTUALIZACION, @PERMISO_CONSULTAR,  @MODIFICADO_POR, '1', '1')
           `;
                 mysqlConnection.query(query, [PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR, MODIFICADO_POR, COD_ROL], (err, rows, fields) => {
                     if (!err) {
@@ -211,7 +211,7 @@ router.get('/pregunta_usuario', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SA', 0, 1, 0, 0, 0, 0, '¿Equipo Favortito?', 'Real Madrid', '','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SA', 0, 1, 0, 0, 0, 0, '¿Equipo Favortito?', 'Real Madrid', '')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -239,7 +239,7 @@ router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
                 const { USUARIO } = req.body;
                 console.log(USUARIO);
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SO', '1', 1, 0, 0, 0, 0, '${USUARIO}', '', '','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SO', '1', 1, 0, 0, 0, 0, '${USUARIO}', '', '')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -271,7 +271,7 @@ router.post('/pregunta_usuario', /*verifyToken,*/ (req, res) => {
             SET @RESPUESTA = ?;
             SET @COD_USUARIO = ?;
                 
-            CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'I', 1, @COD_USUARIO, 0, 0, 0, 0, @PREGUNTA, @RESPUESTA, '','1')
+            CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'I', 1, @COD_USUARIO, 0, 0, 0, 0, @PREGUNTA, @RESPUESTA, '')
           `;
                 mysqlConnection.query(query, [PREGUNTA, RESPUESTA, COD_USUARIO], (err, rows, fields) => {
                     if (!err) {
@@ -386,7 +386,7 @@ router.put('/pregunta_usuario/:COD_PREGUNTA', verifyToken, (req, res) => {
           const { COD_PREGUNTA } = req.params;
   
           mysqlConnection.query(
-              "CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'U', ?, 0, 0, 0, 0, 0, ?, ?, '1','1')",
+              "CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'U', ?, 0, 0, 0, 0, 0, ?, ?, '1')",
               [COD_PREGUNTA, PREGUNTA, RESPUESTA],
               (err, rows, fields) => {
                   if (!err) {
@@ -412,7 +412,7 @@ router.get('/roles', verifyToken, (req, res) => {
         //   if (err) {
          //      res.sendStatus(403);
           //  } else {
-    mysqlConnection.query(`call axe.SP_moduloseguridad('MS_ROLES', 'SA', 1, 1, 1, 1, 1, 1, '1', '1', '1','1');`, (err, rows) => {
+    mysqlConnection.query(`call axe.SP_moduloseguridad('MS_ROLES', 'SA', 1, 1, 1, 1, 1, 1, '1', '1', '1');`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -433,7 +433,7 @@ router.get("/roles/:COD_ROL", verifyToken, (req, res) => {
           if (err) {
             res.sendStatus(403); // Token inválido o expirado
           } else {
-            const consulta = `CALL SP_moduloseguridad('ms_roles', 'SO', '${COD_ROL}', 1, 1, 1, 1, 1, '1','1', '1','1')`;
+            const consulta = `CALL SP_moduloseguridad('ms_roles', 'SO', '${COD_ROL}', 1, 1, 1, 1, 1, '1','1', '1')`;
             mysqlConnection.query(consulta, (error, results) => {
                 if (error) throw error;
                 if (results.length > 0) {
@@ -457,7 +457,7 @@ router.post('/roles', verifyToken, (req, res) => {
     const query = `
       SET @DESCRIPCION = ?;
       SET @MODIFICADO_POR = ?;
-      CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION, @MODIFICADO_POR, '1','1')
+      CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION, @MODIFICADO_POR, '1')
     `;
     mysqlConnection.query(query, [DESCRIPCION, MODIFICADO_POR,Estado_registro], (err, rows, fields) => {
       if (!err) {
@@ -474,7 +474,7 @@ router.put('/roles/:COD_ROL', verifyToken, (req, res) => {
     const { COD_ROL } = req.params;
   
     mysqlConnection.query(
-      "CALL SP_moduloseguridad('ms_roles', 'U', ?, 1, 1, 1, 1, 1,  ?, ? , '1','1')",
+      "CALL SP_moduloseguridad('ms_roles', 'U', ?, 1, 1, 1, 1, 1,  ?, ? , '1')",
       [COD_ROL, DESCRIPCION, MODIFICADO_POR, Estado_registro],
       (err, rows, fields) => {
         //CALL SP_moduloseguridad('ms_roles', 'U', 2, 1, 1, 1, 1, 1,  'Usuario Normal','John Wick', '1')
@@ -499,7 +499,7 @@ router.get('/usuarios', verifyToken, (req, res) => {
                 //  console.log(err.message);
                 res.sendStatus(403)
             } else {
-                const consulta = `CALL SP_moduloseguridad('MS_USUARIOS', 'SA', 1, 1, 1, 1, 1, 1,  '1','1', '1','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_USUARIOS', 'SA', 1, 1, 1, 1, 1, 1,  '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     //if (error) throw error;
                     if (results.length > 0) {
@@ -527,7 +527,7 @@ router.get("/usuarios/:COD_USUARIO", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { COD_USUARIO } = req.params;
-                const consulta = `CALL SP_moduloseguridad('MS_USUARIOS', 'SO', '${COD_USUARIO}', 1, 1, 1, 1, 1,  '1','1', '1','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_USUARIOS', 'SO', '${COD_USUARIO}', 1, 1, 1, 1, 1,  '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -555,7 +555,7 @@ router.post('/usuarios', verifyToken, (req, res) => {
                 //const { COD_USUARIO } = req.params;
 
                 mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_USUARIOS', 'I', 1, 0, ?, ?, 1, 1, ?, ? , ?,1)",
+                    "CALL SP_moduloseguridad('MS_USUARIOS', 'I', 1, 0, ?, ?, 1, 1, ?, ? , ?)",
                     [COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR,Estado_registro],
                     (err, rows, fields) => {
                         if (!err) {
@@ -586,8 +586,8 @@ router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
                 const { COD_USUARIO } = req.params;
 
                 mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_USUARIOS', 'U', ?, 1, ?, ?, ?, 1, ?, ? , ?,1)",
-                    [COD_USUARIO, PRIMER_INGRESO, COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR,Estado_registro],
+                    "CALL SP_moduloseguridad('MS_USUARIOS', 'U', ?, 1, ?, ?, ?, 1, ?, ? , ?)",
+                    [COD_USUARIO, PRIMER_INGRESO, COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR],
                     (err, rows, fields) => {
                         if (!err) {
                             // Retornar lo actualizado

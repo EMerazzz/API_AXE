@@ -22,7 +22,7 @@ const mysqlConnection = require('../database');
 router.get('/docentes', verifyToken, (req, res) => {
   // Verificación de JWT ya realizada por el middleware verifyToken
 
-  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0,0,0,'0','0','0','1','1');`;
+  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0,0,0,'0','0','0','1');`;
 
   mysqlConnection.query(query, (err, rows, fields) => {
     if (!err) {
@@ -40,7 +40,7 @@ router.get('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
     const { COD_DOCENTE } = req.params;
     const query = `
 
-    CALL AXE.SP_modulodocentes('MD_DOCENTES', 'SO',?,0,0,0,'0','0','0','1','1');
+    CALL AXE.SP_modulodocentes('MD_DOCENTES', 'SO',?,0,0,0,'0','0','0','1');
   `;
   mysqlConnection.query(query, [COD_DOCENTE], (err, rows, fields) => {
     if (!err) {
@@ -65,7 +65,7 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
       SET @USUARIO_MODIFICADOR = ?;
 
       
-      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA,0,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR,'1');
+      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA,0,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR);
     `;
     mysqlConnection.query(query, [COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro], (err, rows, fields) => {
       if(!err) {
@@ -83,7 +83,7 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
       const { COD_DOCENTE } = req.params;
     const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro} = req.body;
     const query = `
-    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}','1') ;
+    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}') ;
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err) {
@@ -112,7 +112,7 @@ router.get('/docentes_asignaturas', verifyToken,  (req, res) => {
     // console.log(id, name, salary);
     const query = `
     
-    CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'SA',0,0,0,0,'0','0','0','1','1');
+    CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'SA',0,0,0,0,'0','0','0','1');
     `;
         mysqlConnection.query(query, (err, rows, fields) => {
             if (!err) {
@@ -132,7 +132,7 @@ router.get('/docentes_asignaturas', verifyToken,  (req, res) => {
     const { COD_DOCENTE_ASIGNATURA } = req.params;
     const query = `
   
-    CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'SO',?, 0,0,0,'0','0','0','1','1');
+    CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'SO',?, 0,0,0,'0','0','0','1');
   `;
   mysqlConnection.query(query, [COD_DOCENTE_ASIGNATURA], (err, rows, fields) => {
     if (!err) {
@@ -156,7 +156,7 @@ router.get('/docentes_asignaturas', verifyToken,  (req, res) => {
       SET @USUARIO_MODIFICADOR = ?;
 
       
-      CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'I',0, @COD_DOCENTE,@COD_ASIGNATURA ,@HORAS_SEMANALES,'0','0','0',@USUARIO_MODIFICADOR,'1');
+      CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'I',0, @COD_DOCENTE,@COD_ASIGNATURA ,@HORAS_SEMANALES,'0','0','0',@USUARIO_MODIFICADOR);
     `;
     mysqlConnection.query(query, [COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES,USUARIO_MODIFICADOR,Estado_registro], (err, rows, fields) => {
       if(!err) {
@@ -178,7 +178,7 @@ router.put("/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA", verifyToken, (req, r
     COD_ASIGNATURA,HORAS_SEMANALES,USUARIO_MODIFICADOR,Estado_registro
     } = req.body;
 
-    const sql = `call axe.SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'U','${COD_DOCENTE_ASIGNATURA}','${COD_ASIGNATURA}',1,'${HORAS_SEMANALES}', '1', '1', '1','${USUARIO_MODIFICADOR}','1')`;
+    const sql = `call axe.SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'U','${COD_DOCENTE_ASIGNATURA}','${COD_ASIGNATURA}',1,'${HORAS_SEMANALES}', '1', '1', '1','${USUARIO_MODIFICADOR}')`;
     mysqlConnection.query(sql, (error) => {
       if (!error) {
         res.json({
