@@ -120,9 +120,9 @@ router.post('/login', (req, res) => {
   // Verificamos si es la primera vez que hace login
   router.post('/acceso_permitido', (req, res) => {
     try {
-      const { USUARIO } = req.body;
+      const { USUARIO, OBJETO } = req.body;
   
-      mysqlConnection.query("CALL MS_ACCESO_PERMITIDO(?)", [USUARIO], (error, results) => {
+      mysqlConnection.query("CALL MS_ACCESO_PERMITIDO(?, ?)", [USUARIO, OBJETO], (error, results) => {
         if (error) {
           res.status(500).json({ error: 'Error interno del servidor' });
         } else {
@@ -149,7 +149,7 @@ router.post('/login', (req, res) => {
 
 
 // ver el numero de preguntas que se le solicitaran al usuario
-router.post('/preguntasSolicitadas', (req, res) => {
+router.get('/preguntasSolicitadas', (req, res) => {
   try {
 
     mysqlConnection.query("CALL SP_MS_PARAMETROS_PREGUNTAS;", (error, results) => {
@@ -166,6 +166,7 @@ router.post('/preguntasSolicitadas', (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
 
 
   module.exports = router;

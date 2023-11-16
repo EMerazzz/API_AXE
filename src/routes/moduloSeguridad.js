@@ -635,7 +635,7 @@ router.get('/bitacora', verifyToken, (req, res) => {
 
 // ******************* Preguntas de seguridad
 //Mostrar datos por codigo
-router.post("/preguntaUsuario/", /*verifyToken,*/ (req, res) => {
+router.post("/preguntaUsuario", /*verifyToken,*/ (req, res) => {
     try {
                 const { USUARIO } = req.body;
                 console.log(USUARIO);
@@ -652,5 +652,68 @@ router.post("/preguntaUsuario/", /*verifyToken,*/ (req, res) => {
     }
 });
 
+// ******************* Preguntas de seguridad Milton
+//Mostrar todos los datos
+router.get('/preguntas', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
+                const consulta = `CALL SP_MS_PREGUNTAS('mostrar','null','null')`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } else {
+                        res.send(error);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+// Insertar datos
+router.post('/preguntas', verifyToken, (req, res) => {
+    const {NUEVA_PREGUNTA } = req.body;
+    const query = `
+      SET @DNUEVA_PREGUNTA = ?;
+      CALL SP_MS_PREGUNTAS('I','NULL' ,@NUEVA_PREGUNTA)
+    `;
+    mysqlConnection.query(query, [NUEVA_PREGUNTA], (err, rows, fields) => {
+      if (!err) {
+        res.json({ status: 'Nueva Pregunta ingresada exitosamente' });
+      } else {
+        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+      }
+    });
+  });
+
+  //Actualizar un Registro
+  router.put("/preguntas/:COD_PREGUNTA", verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
+  
+    try {
+      const { COD_PREGUNTA } = req.params;
+      const {NUEVA_PREGUNTA} = req.body;
+      const sql = `CALL SP_MS_PREGUNTAS('U', ${COD_PREGUNTA},${NUEVA_PREGUNTA});`;
+      mysqlConnection.query(sql, error => {
+        if (!error) {
+          res.json({
+            Status: "Pregunta modificada exitosamente"
+          });
+        } else {
+          console.log(error);
+          res.sendStatus(500);
+        }
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  });
 
 module.exports = router;
