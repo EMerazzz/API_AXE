@@ -678,8 +678,9 @@ router.post('/preguntas', verifyToken, (req, res) => {
     const {NUEVA_PREGUNTA } = req.body;
     const query = `
       SET @DNUEVA_PREGUNTA = ?;
-      CALL SP_MS_PREGUNTAS('I','NULL' ,@NUEVA_PREGUNTA)
-    `;
+      CALL SP_MS_PREGUNTAS('I','1', @NUEVA_PREGUNTA)
+    `
+    ;
     mysqlConnection.query(query, [NUEVA_PREGUNTA], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nueva Pregunta ingresada exitosamente' });
