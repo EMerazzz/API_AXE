@@ -54,7 +54,7 @@ router.post("/personas", verifyToken, (req, res) => {
     try {
       
       const { NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,USUARIO_MODIFICADOR, Estado_registro } = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','I',0,'0','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}','null')`;
+      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','I',0,'0','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}','1')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -77,7 +77,7 @@ router.post("/personas", verifyToken, (req, res) => {
     try {
       const { COD_PERSONA } = req.params;
       const {  NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA ,USUARIO_MODIFICADOR, Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','U','${COD_PERSONA}','1','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}','null')`;
+      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','U','${COD_PERSONA}','1','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}','1')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
