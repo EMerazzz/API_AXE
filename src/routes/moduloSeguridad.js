@@ -184,9 +184,8 @@ router.post('/permisos', verifyToken, (req, res) => {
             SET @PERMISO_CONSULTAR = ?;
             SET @MODIFICADO_POR = ?;
             SET @COD_ROL = ?;
-            SET @Estado_registro = ?;
   
-            CALL SP_moduloseguridad('MS_PERMISOS', 'I', 1, @COD_ROL, @PERMISO_INSERCION, @PERMISO_ELIMINACION,  @PERMISO_ACTUALIZACION, @PERMISO_CONSULTAR,  @MODIFICADO_POR, '1', '1',@Estado_registro)
+            CALL SP_moduloseguridad('MS_PERMISOS', 'I', 1, @COD_ROL, @PERMISO_INSERCION, @PERMISO_ELIMINACION,  @PERMISO_ACTUALIZACION, @PERMISO_CONSULTAR,  @MODIFICADO_POR, '1', '1','1')
           `;
                 mysqlConnection.query(query, [PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR, MODIFICADO_POR, COD_ROL], (err, rows, fields) => {
                     if (!err) {
@@ -271,9 +270,8 @@ router.post('/pregunta_usuario', /*verifyToken,*/ (req, res) => {
             SET @PREGUNTA = ?;
             SET @RESPUESTA = ?;
             SET @COD_USUARIO = ?;
-            SET @Estado_registro= ?;
                 
-            CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'I', 1, @COD_USUARIO, 0, 0, 0, 0, @PREGUNTA, @RESPUESTA, '',@Estado_registro)
+            CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'I', 1, @COD_USUARIO, 0, 0, 0, 0, @PREGUNTA, @RESPUESTA, '','1')
           `;
                 mysqlConnection.query(query, [PREGUNTA, RESPUESTA, COD_USUARIO], (err, rows, fields) => {
                     if (!err) {
@@ -304,9 +302,8 @@ router.post('/usuario_pregunta', /*verifyToken,*/ (req, res) => {
             SET @COD_PREGUNTA = ?;
             SET @RESPUESTA = ?;
             SET @COD_USUARIO = ?;
-            SET @Estado_registro= ?;
                 
-            CALL SP_INSERT_MS_PREGUNTAS_SEGURIDAD(@COD_USUARIO, @COD_PREGUNTA, @RESPUESTA,@Estado_registro);
+            CALL SP_INSERT_MS_PREGUNTAS_SEGURIDAD(@COD_USUARIO, @COD_PREGUNTA, @RESPUESTA,'1');
           `;
                 mysqlConnection.query(query, [COD_PREGUNTA, RESPUESTA,  COD_USUARIO], (err, rows, fields) => {
                     if (!err) {
@@ -460,8 +457,7 @@ router.post('/roles', verifyToken, (req, res) => {
     const query = `
       SET @DESCRIPCION = ?;
       SET @MODIFICADO_POR = ?;
-      SET @Estado_registro = ?;
-      CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION, @MODIFICADO_POR, '1',@Estado_registro)
+      CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION, @MODIFICADO_POR, '1','1')
     `;
     mysqlConnection.query(query, [DESCRIPCION, MODIFICADO_POR,Estado_registro], (err, rows, fields) => {
       if (!err) {

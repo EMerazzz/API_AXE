@@ -49,7 +49,7 @@ router.post("/estudiantes", verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVEL_ACADEMICO, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
-      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','I','1','${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','${JORNADA_ESTUDIANTE}')`;
+      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','I','1','${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -72,7 +72,7 @@ router.post("/estudiantes", verifyToken, (req, res) => {
     try {
       const { COD_ESTUDIANTE } = req.params;
       const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVEL_ACADEMICO, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
-      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','U',${COD_ESTUDIANTE},'${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','${JORNADA_ESTUDIANTE}')`;
+      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','U',${COD_ESTUDIANTE},'${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -142,7 +142,7 @@ router.post("/padres_tutores", verifyToken, (req, res) => {
         Estado_registro
       } = req.body;
   
-      const sql = `Call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES','I',1,'${COD_PERSONA}','${NOMBRE_PADRE_TUTOR}','${APELLIDO_PADRE_TUTOR}','${OCUPACION_PADRE_TUTOR}','${RELACION_PADRE_ESTUDIANTE}','${USUARIO_MODIFICADOR}',${Estado_registro})`;
+      const sql = `Call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES','I',1,'${COD_PERSONA}','${NOMBRE_PADRE_TUTOR}','${APELLIDO_PADRE_TUTOR}','${OCUPACION_PADRE_TUTOR}','${RELACION_PADRE_ESTUDIANTE}','${USUARIO_MODIFICADOR}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -174,7 +174,7 @@ router.put("/padres_tutores/:COD_PADRE_TUTOR", /*verifyToken, */(req, res) => {
         Estado_registro
       } = req.body;
   
-        const sql = `call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES', 'UP', '${COD_PADRE_TUTOR}', '${COD_PERSONA}', '${NOMBRE_PADRE_TUTOR}', '${APELLIDO_PADRE_TUTOR}', '${OCUPACION_PADRE_TUTOR}', '${RELACION_PADRE_ESTUDIANTE}','${USUARIO_MODIFICADOR}','${Estado_registro}')`;
+        const sql = `call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES', 'UP', '${COD_PADRE_TUTOR}', '${COD_PERSONA}', '${NOMBRE_PADRE_TUTOR}', '${APELLIDO_PADRE_TUTOR}', '${OCUPACION_PADRE_TUTOR}', '${RELACION_PADRE_ESTUDIANTE}','${USUARIO_MODIFICADOR}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({

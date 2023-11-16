@@ -44,7 +44,7 @@ router.get("/asignaturas/:COD_ASIGNATURA", verifyToken, (req, res) => {
 router.post("/asignaturas", verifyToken, (req, res) => {
     try {
         const { NOMBRE_ASIGNATURA,Estado_registro } = req.body;
-        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','I','1','1','1','${NOMBRE_ASIGNATURA}','${Estado_registro}')`;
+        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','I','1','1','1','${NOMBRE_ASIGNATURA}','1')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -64,7 +64,7 @@ router.put("/asignaturas/:COD_ASIGNATURA", verifyToken,(req, res) => {
     try {
         const { COD_ASIGNATURA } = req.params;
         const { NOMBRE_ASIGNATURA,Estado_registro} = req.body;
-        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','U','${COD_ASIGNATURA}','1','1','${NOMBRE_ASIGNATURA}','${Estado_registro}')`;
+        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','U','${COD_ASIGNATURA}','1','1','${NOMBRE_ASIGNATURA}','1')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -116,7 +116,7 @@ router.get("/jornadas/:COD_JORNADA", verifyToken, (req, res) => {
 router.post("/jornadas", verifyToken, (req, res) => {
     try {
         const { DESCRIPCION_JOR,Estado_registro } = req.body;
-        const sql = `Call SP_moduloAcademico('MA_JORNADA','I','1','1','1','${DESCRIPCION_JOR}','${Estado_registro}')`;
+        const sql = `Call SP_moduloAcademico('MA_JORNADA','I','1','1','1','${DESCRIPCION_JOR}','1')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -138,7 +138,7 @@ router.post("/jornadas", verifyToken, (req, res) => {
     try {
         const { COD_JORNADA } = req.params;
         const { DESCRIPCION_JOR,Estado_registro } = req.body;
-        const sql = `Call SP_moduloAcademico('MA_JORNADA','U','${COD_JORNADA}','1','1','${DESCRIPCION_JOR}','${Estado_registro}')`;
+        const sql = `Call SP_moduloAcademico('MA_JORNADA','U','${COD_JORNADA}','1','1','${DESCRIPCION_JOR}','1')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -195,7 +195,7 @@ router.post("/anio_academico", verifyToken, (req, res) => {
   
     try {
       const { descripcion,Estado_registro } = req.body;
-      const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','I','1','1','1','${descripcion}','${Estado_registro}')`;
+      const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','I','1','1','1','${descripcion}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -241,7 +241,7 @@ router.post("/anio_academico", verifyToken, (req, res) => {
             } else {
                 const { COD_ANIO_ACADEMICO } = req.params;
                 const { descripcion,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','U','${COD_ANIO_ACADEMICO}','1','1','${descripcion}','${Estado_registro}')`;
+                const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','U','${COD_ANIO_ACADEMICO}','1','1','${descripcion}','1')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
@@ -337,7 +337,7 @@ router.post("/nivel_academico", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { descripcion,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','I','1','1','1','${descripcion}','${Estado_registro}')`;
+                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','I','1','1','1','${descripcion}','1')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
@@ -364,7 +364,7 @@ router.post("/nivel_academico", verifyToken, (req, res) => {
             } else {
                 const { COD_NIVEL_ACADEMICO } = req.params;
                 const { descripcion,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','U','${COD_NIVEL_ACADEMICO}','1','1','${descripcion}','${Estado_registro}')`;
+                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','U','${COD_NIVEL_ACADEMICO}','1','1','${descripcion}','1')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
@@ -438,7 +438,7 @@ router.post("/Secciones", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { DESCRIPCION_SECCIONES,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_SECCIONES','I','1','1','1','${DESCRIPCION_SECCIONES}','${Estado_registro}')`;
+                const sql = `Call SP_moduloAcademico('MA_SECCIONES','I','1','1','1','${DESCRIPCION_SECCIONES}','1')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
@@ -465,7 +465,7 @@ router.put("/Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
             } else {
                 const { COD_SECCIONES } = req.params;
                 const { DESCRIPCION_SECCIONES,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_SECCIONES','U','${COD_SECCIONES}','1','1','${DESCRIPCION_SECCIONES}','${Estado_registro}')`;
+                const sql = `Call SP_moduloAcademico('MA_SECCIONES','U','${COD_SECCIONES}','1','1','${DESCRIPCION_SECCIONES}','1')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({

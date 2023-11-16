@@ -63,10 +63,9 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
       SET @ESPECIALIDAD = ?;
       SET @GRADO_ENSENIANZA = ?;
       SET @USUARIO_MODIFICADOR = ?;
-      SET @Estado_registro = ?;
 
       
-      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA,0,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR,@Estado_registro);
+      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA,0,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR,'1');
     `;
     mysqlConnection.query(query, [COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro], (err, rows, fields) => {
       if(!err) {
@@ -84,7 +83,7 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
       const { COD_DOCENTE } = req.params;
     const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro} = req.body;
     const query = `
-    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}','${Estado_registro}') ;
+    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}','1') ;
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err) {
@@ -155,10 +154,9 @@ router.get('/docentes_asignaturas', verifyToken,  (req, res) => {
       SET @COD_ASIGNATURA = ?;
       SET @HORAS_SEMANALES = ?;
       SET @USUARIO_MODIFICADOR = ?;
-      SET @Estado_registro = ?;
 
       
-      CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'I',0, @COD_DOCENTE,@COD_ASIGNATURA ,@HORAS_SEMANALES,'0','0','0',@USUARIO_MODIFICADOR,@Estado_registro);
+      CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'I',0, @COD_DOCENTE,@COD_ASIGNATURA ,@HORAS_SEMANALES,'0','0','0',@USUARIO_MODIFICADOR,'1');
     `;
     mysqlConnection.query(query, [COD_DOCENTE,COD_ASIGNATURA,HORAS_SEMANALES,USUARIO_MODIFICADOR,Estado_registro], (err, rows, fields) => {
       if(!err) {
@@ -180,7 +178,7 @@ router.put("/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA", verifyToken, (req, r
     COD_ASIGNATURA,HORAS_SEMANALES,USUARIO_MODIFICADOR,Estado_registro
     } = req.body;
 
-    const sql = `call axe.SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'U','${COD_DOCENTE_ASIGNATURA}','${COD_ASIGNATURA}',1,'${HORAS_SEMANALES}', '1', '1', '1','${USUARIO_MODIFICADOR}','${Estado_registro}')`;
+    const sql = `call axe.SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'U','${COD_DOCENTE_ASIGNATURA}','${COD_ASIGNATURA}',1,'${HORAS_SEMANALES}', '1', '1', '1','${USUARIO_MODIFICADOR}','1')`;
     mysqlConnection.query(sql, (error) => {
       if (!error) {
         res.json({
