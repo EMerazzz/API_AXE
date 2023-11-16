@@ -657,7 +657,7 @@ router.get('/preguntas', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_MS_PREGUNTAS('mostrar','null','null')`;
+                const consulta = `CALL SP_MS_PREGUNTAS('mostrar','1','1');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
