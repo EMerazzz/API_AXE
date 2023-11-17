@@ -675,13 +675,13 @@ router.get('/preguntas', verifyToken, (req, res) => {
 
 // Insertar datos
 router.post('/preguntas', verifyToken, (req, res) => {
-    const {NUEVA_PREGUNTA } = req.body;
+    const {PREGUNTA } = req.body;
     const query = `
-      SET @DNUEVA_PREGUNTA = ?;
-      CALL SP_MS_PREGUNTAS('I','1', @NUEVA_PREGUNTA)
+      SET @PREGUNTA = ?;
+      CALL SP_MS_PREGUNTAS('I','1', @PREGUNTA)
     `
     ;
-    mysqlConnection.query(query, [NUEVA_PREGUNTA], (err, rows, fields) => {
+    mysqlConnection.query(query, [PREGUNTA], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nueva Pregunta ingresada exitosamente' });
       } else {
@@ -696,8 +696,8 @@ router.post('/preguntas', verifyToken, (req, res) => {
   
     try {
       const { COD_PREGUNTA } = req.params;
-      const {NUEVA_PREGUNTA} = req.body;
-      const sql = `CALL SP_MS_PREGUNTAS('U', ${COD_PREGUNTA},${NUEVA_PREGUNTA});`;
+      const {PREGUNTA} = req.body;
+      const sql = `CALL SP_MS_PREGUNTAS('U', ${COD_PREGUNTA},${PREGUNTA});`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
