@@ -7,12 +7,13 @@ const verifyToken = require('./verify');
 
 const mysqlConnection = require('../database');
 // Ruta para crear una nueva persona
+
 router.post("/INSpersonas", verifyToken, (req, res) => {
   // Verificación de JWT ya realizada por el middleware verifyToken
 
   try {
     
-    const { NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,USUARIO_MODIFICADOR,TELEFONO,TIPO_TELEFONO, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO_CONTACTO,CORREO_ELECTRONICO,Estado_registro } = req.body;
+    const {USUARIO_MODIFICADOR, NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,TELEFONO,TIPO_TELEFONO, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO_CONTACTO,RELACION,CORREO_ELECTRONICO,Estado_registro } = req.body;
     const sql = `call axe.personas_lic('I','${USUARIO_MODIFICADOR}','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}');`;
     mysqlConnection.query(sql, error => {
       if (!error) {
