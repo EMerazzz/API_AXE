@@ -433,7 +433,7 @@ router.get('/direcciones', verifyToken, (req, res) => {
     try {
       const { COD_DIRECCION } = req.params;
       const { COD_PERSONA, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS ,USUARIO_MODIFICADOR,Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','U','${COD_DIRECCION}','${COD_PERSONA}','${DIRECCION}','${DEPARTAMENTO}','${CIUDAD}','${PAIS}','null','10','2015-5-14','${USUARIO_MODIFICADOR}'`;
+      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','U','${COD_DIRECCION}','${COD_PERSONA}','${DIRECCION}','${DEPARTAMENTO}','${CIUDAD}','${PAIS}','null','10','2015-5-14','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
