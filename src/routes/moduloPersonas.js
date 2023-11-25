@@ -6,6 +6,29 @@ const jwt = require('jsonwebtoken')
 const verifyToken = require('./verify');
 
 const mysqlConnection = require('../database');
+// Ruta para crear una nueva persona
+
+router.post("/INSpersonas", verifyToken, (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
+
+  try {
+    
+    const {USUARIO_MODIFICADOR, NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,TELEFONO,TIPO_TELEFONO, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO_CONTACTO,RELACION,CORREO_ELECTRONICO,Estado_registro } = req.body;
+    const sql = `call axe.personas_lic('I','${USUARIO_MODIFICADOR}','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}');`;
+    mysqlConnection.query(sql, error => {
+      if (!error) {
+        res.json({
+          Status: "Persona Registrada"
+        });
+      } else {
+        console.log(error);
+        res.status(500).json({ message: "Error al registrar la persona" });
+      }
+    });
+  } catch (error) {
+    res.send(error);
+  }
+});
 
 /*************************TABLA PERSONAS ************************** */
 //MOTRAR DATOS DE LA TABLA DE ASIGNATURAS
