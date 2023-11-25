@@ -50,25 +50,27 @@ router.get('/personas', verifyToken, (req, res) => {
        });
   });
   
-//GET por codigo
-  router.get("/personas/:COD_PERSONA", verifyToken, (req, res) => {
-    // Verificación de JWT ya realizada por el middleware verifyToken
+// Eliminar persona por código
+router.put("/del_personas/:COD_PERSONA", verifyToken, (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
   
-    const { COD_PERSONA } = req.params;
-    const sql = `Call SP_MP_PERSONAS('MP_PERSONAS', 'SO',${COD_PERSONA}, NULL, 'JoQQQhn', 'Doe', '1277AA3456789', 'M', 'Cliente', 30, '1990-01-01','Cliente')`;
-  
-    mysqlConnection.query(sql, (error, results) => {
-      if (error) {
-        res.status(500).json({ message: "Error al consultar la base de datos" });
-      } else {
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
-        } else {
-          res.status(404).json({ message: "Persona no encontrada" });
-        }
-      }
-    });
+  const { COD_PERSONA } = req.params;
+
+  // Usar parámetros seguros con marcadores de posición
+  const sql = `CALL SP_MP_PERSONAS('MP_PERSONAS', 'DE', ?, NULL, 'JoQQQhn', 'Doe', '1277AA3456789', 'M', 'Cliente', 30, '1990-01-01','Cliente')`;
+
+  // Pasar los valores como un array en el segundo argumento
+  mysqlConnection.query(sql, [COD_PERSONA], (error, results) => {
+    if (!error) {
+      res.json({
+        status: "Persona Eliminada"
+      });
+    } else {
+      console.error(error);
+      res.status(500).json({ message: "Error al eliminar la persona" });
+    }
   });
+});
 
 // Ruta para crear una nueva persona
 router.post("/personas", verifyToken, (req, res) => {
@@ -133,20 +135,22 @@ router.get('/correos', verifyToken, (req, res) => {
   });
   
   // Ruta para mostrar datos de un correo por código
-  router.get("/correos/:COD_CORREO", verifyToken, (req, res) => {
+  router.put("/del_correos/:COD_CORREO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_CORREO } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','SO','${COD_CORREO}','1','null','null','null','null','null','1','2015-5-14','null')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CORREOS','DE','${COD_CORREO}','1','null','null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
+        if (!error) {
+          res.json({
+            Status: "Correo Eliminado"
+          });
         } else {
-          res.send(error)
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar Correo" });
         }
-      })
+      });
     } catch (error) {
       res.send(error)
     }
@@ -213,20 +217,22 @@ router.get('/telefonos', verifyToken, (req, res) => {
   });
   
   // Ruta para mostrar datos de un telefono por código
-  router.get("/telefonos/:COD_TELEFONO", verifyToken, (req, res) => {
+  router.put("/del_telefonos/:COD_TELEFONO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_TELEFONO } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','SO','${COD_TELEFONO}','1','null','null','null','null','null','1','2015-5-14','null')`;
+      const sql = `Call SP_MP_PERSONAS('MP_TELEFONOS','DE','${COD_TELEFONO}','1','null','null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
+        if (!error) {
+          res.json({
+            Status: "Télefono Eliminado"
+          });
         } else {
-          res.send(error)
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar Télefono" });
         }
-      })
+      });
     } catch (error) {
       res.send(error)
     }
@@ -293,20 +299,22 @@ router.get('/contacto_emergencia', verifyToken, (req, res) => {
   });
   
   // Ruta para mostrar datos de un contacto de emergencia por código
-  router.get("/contacto_emergencia/:COD_CONTACTO_EMERGENCIA",/*verifyToken,*/ (req, res) => {
+  router.put("/del_contactoemergencia/:COD_CONTACTO_EMERGENCIA",/*verifyToken,*/ (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_CONTACTO_EMERGENCIA } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','SO','${COD_CONTACTO_EMERGENCIA}','1','null','null','null','null','null','1','2015-5-14','null')`;
+      const sql = `Call SP_MP_PERSONAS('MP_CONTACTOS_EMERGENCIA','DE','${COD_CONTACTO_EMERGENCIA}','1','null','null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
+        if (!error) {
+          res.json({
+            Status: "Contacto Emergencia Eliminado"
+          });
         } else {
-          res.send(error)
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar Contacto Emergencia" });
         }
-      })
+      });
     } catch (error) {
       res.send(error)
     }
@@ -375,20 +383,22 @@ router.get('/direcciones', verifyToken, (req, res) => {
   });
   
   // Ruta para mostrar datos de una dirección por código
-  router.get("/direcciones/:COD_DIRECCION", verifyToken, (req, res) => {
+  router.put("/del_direcciones/:COD_DIRECCION", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_DIRECCION } = req.params;
-      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','SO','${COD_DIRECCION}','1',null,'null','null','null','null','1','2015-5-14','null')`;
+      const sql = `Call SP_MP_PERSONAS('MP_DIRECCIONES','DE','${COD_DIRECCION}','1',null,'null','null','null','null','1','2015-5-14','null')`;
       mysqlConnection.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
+        if (!error) {
+          res.json({
+            Status: "Dirección Eliminada"
+          });
         } else {
-          res.send(error)
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar Dirección" });
         }
-      })
+      });
     } catch (error) {
       res.send(error)
     }

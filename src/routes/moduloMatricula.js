@@ -21,18 +21,20 @@ router.get('/matricula', verifyToken, (req, res) => {
   });
   
 //GET por codigo
-router.get("/matricula/:COD_MATRICULA", verifyToken, (req, res) => {
+router.put("/del_matricula/:COD_MATRICULA", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_MATRICULA } = req.params;
-      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'SO',${COD_MATRICULA}, 0, 0, 0, '0', '0', '0',0,'0');`;
+      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'DE',${COD_MATRICULA}, 0, 0, 0, '0', '0', '0',0,'0');`;
       mysqlConnection.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
+        if (!error) {
+          res.json({
+            Status: "Matricula Eliminado"
+          });
         } else {
-          res.sendStatus(404);
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar Matricula" });
         }
       });
     } catch (error) {

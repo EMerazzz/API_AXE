@@ -35,7 +35,7 @@ router.get('/estado_usuario', verifyToken, (req, res) => {
 
 
 //Mostrar datos de un rol por codigo
-router.get("/estado_usuario/:COD_ESTADO_USUARIO", verifyToken, (req, res) => {
+router.put("/del_estado_usuario/:COD_ESTADO_USUARIO", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
@@ -43,13 +43,15 @@ router.get("/estado_usuario/:COD_ESTADO_USUARIO", verifyToken, (req, res) => {
             } else {
                 // Resto del código que realiza la consulta
                 const { COD_ESTADO_USUARIO } = req.params;
-                const consulta = `CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'SO', '${COD_ESTADO_USUARIO}', 1, 1, 1, 1, 1,  '1','1', '1','1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'DE', '${COD_ESTADO_USUARIO}', 1, 1, 1, 1, 1,  '1','1', '1','1')`;
                 mysqlConnection.query(consulta, (error, results) => {
-                    if (error) throw error;
-                    if (results.length > 0) {
-                        res.status(200).json(results[0]);
+                    if (!error) {
+                        res.json({
+                            Status: "Estado Eliminado"
+                        });
                     } else {
-                        res.send(error);
+                        console.log(error);
+                        res.status(500).json({ message: "Error al Eliminar Estado" });
                     }
                 });
             }
@@ -58,6 +60,7 @@ router.get("/estado_usuario/:COD_ESTADO_USUARIO", verifyToken, (req, res) => {
         res.send(error);
     }
 });
+
 
 //Agregar un nuevo estado usuario
 router.post('/estado_usuario', verifyToken, (req, res) => {
@@ -144,7 +147,7 @@ router.get('/permisos', verifyToken, (req, res) => {
 
 
 //Mostrar datos de un permiso por codigo
-router.get("/permisos/:COD_PERMISO", verifyToken, (req, res) => {
+router.put("/del_permisos/:COD_PERMISO", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
@@ -152,13 +155,15 @@ router.get("/permisos/:COD_PERMISO", verifyToken, (req, res) => {
             } else {
                 // Resto del código que realiza la consulta
                 const { COD_PERMISO } = req.params;
-                const consulta = `CALL SP_moduloseguridad('MS_PERMISOS', 'SO', '${COD_PERMISO}', 1, 1, 1, 1, 1,  '1','1', '1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_PERMISOS', 'DE', '${COD_PERMISO}', 1, 1, 1, 1, 1,  '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
-                    if (error) throw error;
-                    if (results.length > 0) {
-                        res.status(200).json(results[0]);
+                    if (!error) {
+                        res.json({
+                            Status: "Permiso Eliminado"
+                        });
                     } else {
-                        res.send(error);
+                        console.log(error);
+                        res.status(500).json({ message: "Error al Eliminar Permiso" });
                     }
                 });
             }
@@ -167,6 +172,7 @@ router.get("/permisos/:COD_PERMISO", verifyToken, (req, res) => {
         res.send(error);
     }
 });
+
 
 // Insertar un permiso
 router.post('/permisos', verifyToken, (req, res) => {
@@ -426,29 +432,32 @@ router.get('/roles', verifyToken, (req, res) => {
   
 
 //Mostrar datos por codigo
-router.get("/roles/:COD_ROL", verifyToken, (req, res) => {
+router.put("/del_roles/:COD_ROL", verifyToken, (req, res) => {
     try {
         const { COD_ROL } = req.params;
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
-          if (err) {
-            res.sendStatus(403); // Token inválido o expirado
-          } else {
-            const consulta = `CALL SP_moduloseguridad('ms_roles', 'SO', '${COD_ROL}', 1, 1, 1, 1, 1, '1','1', '1')`;
-            mysqlConnection.query(consulta, (error, results) => {
-                if (error) throw error;
-                if (results.length > 0) {
-                    console.log(COD_ROL);
-                    res.status(200).json(results[0]);
-                } else {
-                    res.send(error);
-                }
-            });
-          }
+            if (err) {
+                res.sendStatus(403); // Token inválido o expirado
+            } else {
+                const consulta = `CALL SP_moduloseguridad('ms_roles', 'DE', '${COD_ROL}', 1, 1, 1, 1, 1, '1','1', '1')`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (!error) {
+                        res.json({
+                            Status: "Rol Eliminado"
+                        });
+                    } else {
+                        console.log(error);
+                        res.status(500).json({ message: "Error al Eliminar Rol" });
+                    }
+                });
+            }
         });
     } catch (error) {
-        res.send(error);
+        console.error(error);
+        res.status(500).json({ message: "Error inesperado" });
     }
 });
+
 // fin
 
 //Insertando un registro
