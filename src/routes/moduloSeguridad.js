@@ -518,8 +518,9 @@ router.get('/usuarios', verifyToken, (req, res) => {
     }
 });
 
+
 //Mostrar datos de un rol por codigo
-router.get("/usuarios/:COD_USUARIO", verifyToken, (req, res) => {
+router.put("/del_usuarios/:COD_USUARIO", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             // Si hubo un problema con la verificación del token
@@ -527,14 +528,16 @@ router.get("/usuarios/:COD_USUARIO", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { COD_USUARIO } = req.params;
-                const consulta = `CALL SP_moduloseguridad('MS_USUARIOS', 'SO', '${COD_USUARIO}', 1, 1, 1, 1, 1,  '1','1', '1')`;
+                const consulta = `CALL SP_moduloseguridad('MS_USUARIOS', 'DE', '${COD_USUARIO}', 1, 1, 1, 1, 1,  '1','1', '1')`;
                 mysqlConnection.query(consulta, (error, results) => {
-                    if (error) throw error;
-                    if (results.length > 0) {
-                        res.status(200).json(results[0]);
-                    } else {
-                        res.send(error);
-                    }
+                if (!error) {
+                    res.json({
+                      Status: "Usuario Eliminado"
+                    });
+                  } else {
+                    console.log(error);
+                    res.status(500).json({ message: "Error al Eliminar Usuario" });
+                  }
                 });
             }
         });
