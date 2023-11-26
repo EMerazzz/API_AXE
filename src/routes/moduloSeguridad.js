@@ -303,7 +303,7 @@ router.post('/usuario_pregunta', /*verifyToken,*/ (req, res) => {
             SET @RESPUESTA = ?;
             SET @COD_USUARIO = ?;
                 
-            CALL SP_INSERT_MS_PREGUNTAS_SEGURIDAD(@COD_USUARIO, @COD_PREGUNTA, @RESPUESTA,'1');
+            CALL SP_INSERT_MS_PREGUNTAS_SEGURIDAD(@COD_USUARIO, @COD_PREGUNTA, @RESPUESTA);
           `;
                 mysqlConnection.query(query, [COD_PREGUNTA, RESPUESTA,  COD_USUARIO], (err, rows, fields) => {
                     if (!err) {
@@ -675,6 +675,26 @@ router.get('/preguntas', verifyToken, (req, res) => {
         res.send(error);
     }
 });
+
+//
+router.post("/permisos_usuario", /*verifyToken,*/ (req, res) => {
+    try {
+                const { USUARIO, OBJETO } = req.body;
+                // CALL SP_MS_PERMISOS_USUARIOS('S0','JOSUE', 'BITACORA')
+               // const consulta = `CALL SP_MS_PREGUNTAS_SEGURIDAD('${USUARIO}')`;
+                const consulta = `CALL SP_MS_PERMISOS_USUARIOS('SO','${USUARIO}', '${OBJETO}')`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } 
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+//
 
 // Insertar datos
 router.post('/preguntas', verifyToken, (req, res) => {
