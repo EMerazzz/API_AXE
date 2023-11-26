@@ -824,7 +824,7 @@ router.post('/objetos', verifyToken, (req, res) => {
       
       // Corrección en la construcción de la consulta SQL
       const sql = `CALL SP_MS_OBJETOS('${COD_OBJETO}','${OBJETO}','${DESCRIPCION}','${TIPO_OBJETO}','U')`;
-      
+    
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
