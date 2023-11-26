@@ -49,7 +49,25 @@ router.get('/personas', verifyToken, (req, res) => {
     // }
        });
   });
+  //GET por codigo
+  router.get("/personas/:COD_PERSONA", verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
   
+    const { COD_PERSONA } = req.params;
+    const sql = `Call SP_MP_PERSONAS('MP_PERSONAS', 'SO',${COD_PERSONA}, NULL, 'JoQQQhn', 'Doe', '1277AA3456789', 'M', 'Cliente', 30, '1990-01-01','Cliente')`;
+  
+    mysqlConnection.query(sql, (error, results) => {
+      if (error) {
+        res.status(500).json({ message: "Error al consultar la base de datos" });
+      } else {
+        if (results.length > 0) {
+          res.status(200).json(results[0]);
+        } else {
+          res.status(404).json({ message: "Persona no encontrada" });
+        }
+      }
+    });
+  });
 // Eliminar persona por código
 router.put("/del_personas/:COD_PERSONA", verifyToken, (req, res) => {
   // Verificación de JWT ya realizada por el middleware verifyToken
