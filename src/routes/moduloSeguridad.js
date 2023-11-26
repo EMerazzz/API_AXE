@@ -694,7 +694,23 @@ router.post('/preguntas', verifyToken, (req, res) => {
   });
 
   //Actualizar un Registro
-  router.put("/preguntas/:COD_PREGUNTA", verifyToken, (req, res) => {
+  router.put('/preguntas/:COD_PREGUNTA', verifyToken, (req, res) => {
+    const {COD_PREGUNTA} = req.params;
+    const {PREGUNTA } = req.body;
+    const query = `
+      SET @PREGUNTA = ?;
+      CALL SP_MS_PREGUNTAS('U',@COD_PREGUNTA, @PREGUNTA)
+          `
+    ;
+    mysqlConnection.query(query, [COD_PREGUNTA], [PREGUNTA],(err, rows, fields) => {
+      if (!err) {
+        res.json({ status: 'Pregunta modificada exitosamente' });
+      } else {
+        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+      }
+    });
+  });
+  /* router.put("/preguntas/:COD_PREGUNTA", verifyToken, (req, res) => {
      //Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
@@ -714,7 +730,7 @@ router.post('/preguntas', verifyToken, (req, res) => {
     } catch (error) {
       res.send(error);
     }
-  });
+  }); */
 
 
 // ******************* Preguntas de seguridad Milton (OBJETOS)
@@ -787,7 +803,7 @@ router.post('/objetos', verifyToken, (req, res) => {
   });
 
   // Modificar datos
-  router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
+   router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
     //Verificación de JWT ya realizada por el middleware verifyToken
  
    try {
@@ -807,5 +823,5 @@ router.post('/objetos', verifyToken, (req, res) => {
    } catch (error) {
      res.send(error);
    }
- });
+ }); 
 module.exports = router;
