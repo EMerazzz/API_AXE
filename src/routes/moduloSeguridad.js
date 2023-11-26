@@ -911,7 +911,7 @@ router.get('/parametros', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_MS_PARAMETROS('SA','1','1','1','1');`;
+                const consulta = `CALL SP_MS_PARAMETROS1('SA','1','1','1','1');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -934,7 +934,7 @@ router.post('/parametros', verifyToken, (req, res) => {
       SET @PARAMETRO = ?;
       SET @VALOR = ?;
       SET @USUARIO = ?;
-      CALL SP_MS_PARAMETROS('I','1',@PARAMETRO,@VALOR,@USUARIO)
+      CALL SP_MS_PARAMETROS1('I','1',@PARAMETRO,@VALOR,@USUARIO)
     `
     ;
     mysqlConnection.query(query, [PARAMETRO],[VALOR],[USUARIO], (err, rows, fields) => {
@@ -954,7 +954,7 @@ router.post('/parametros', verifyToken, (req, res) => {
    try {
      const { COD_PARAMETRO } = req.params;
      const {PARAMETRO,USUARIO,VALOR} = req.body;
-     const sql = `CALL SP_MS_PARAMETROS('U',${COD_PARAMETRO},${PARAMETRO},${VALOR}),${USUARIO})`;
+     const sql = `CALL SP_MS_PARAMETROS1('U',${COD_PARAMETRO},${PARAMETRO},${VALOR}),${USUARIO})`;
      mysqlConnection.query(sql, error => {
        if (!error) {
          res.json({
