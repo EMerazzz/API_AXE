@@ -235,7 +235,7 @@ router.get('/pregunta_usuario', verifyToken, (req, res) => {
 
 
 //Mostrar datos por codigo
-router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
+router.post("/preguntas_usuario", /*verifyToken,*/ (req, res) => {
     try {
         /*
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
@@ -244,8 +244,7 @@ router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
             } else {*/
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
                 const { USUARIO } = req.body;
-                console.log(USUARIO);
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SO', '1', 1, 0, 0, 0, 0, '${USUARIO}', '', '')`;
+                const consulta = `call axe.SP_MS_PREGUNTAS_SEG_USUARIO('${USUARIO}');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -740,6 +739,21 @@ router.get('/roles_objetos', (req, res) => {
         const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR } = req.body;
         //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
         const consulta = `CALL SP_MS_ROLES_PERMISOS('U', ${COD_ROL_OBJETO}, ${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR})`;
+        mysqlConnection.query(consulta, (error, results) => {
+            if (error) throw error;
+            res.status(200).json("exito");
+});
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+
+  // Eliminar roles
+  router.put('/del_roles_objetos/:COD_ROL_OBJETO', (req, res) => {
+    try {
+        const { COD_ROL_OBJETO } = req.params;
+        //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('DE', ${COD_ROL_OBJETO}, 1, 1, 1, 1, 1, 1)`;
         mysqlConnection.query(consulta, (error, results) => {
             if (error) throw error;
             res.status(200).json("exito");
