@@ -253,7 +253,6 @@ router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
                     } /*else {
                         res.send(error);
                     }
-
                 });
             }*/
         });
@@ -686,6 +685,7 @@ router.get('/preguntas', verifyToken, (req, res) => {
 });
 
 //
+
 router.post("/permisos_usuario", /*verifyToken,*/ (req, res) => {
     try {
                 const { USUARIO, OBJETO } = req.body;
@@ -703,7 +703,52 @@ router.post("/permisos_usuario", /*verifyToken,*/ (req, res) => {
     }
 });
 
-//
+// ROLES - OBJETOS
+router.get('/roles_objetos', (req, res) => {
+    try {
+      mysqlConnection.query(`CALL SP_MS_ROLES_PERMISOS('SA', 1, 1, 1, 1, 1, 1, 1);`, (error, results) => {
+        if (error) {
+          res.status(500).json({ error: 'Error interno del servidor' });
+        }else{
+            res.status(200).json(results[0]);
+        }
+      });
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+
+// Insertar objetos
+  router.post('/roles_objetos', (req, res) => {
+    try {
+        const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR } = req.body;
+        
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('I', 1,${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR})`;
+        mysqlConnection.query(consulta, (error, results) => {
+            if (error) throw error;
+            res.status(200).json("Actualizado");
+});
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+
+  // Modificar objetos
+  router.put('/roles_objetos/:COD_ROL_OBJETO', (req, res) => {
+    try {
+        const { COD_ROL_OBJETO } = req.params;
+        const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR } = req.body;
+        //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('U', ${COD_ROL_OBJETO}, ${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR})`;
+        mysqlConnection.query(consulta, (error, results) => {
+            if (error) throw error;
+            res.status(200).json("exito");
+});
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+
 
 // Insertar datos
 router.post('/preguntas', verifyToken, (req, res) => {
