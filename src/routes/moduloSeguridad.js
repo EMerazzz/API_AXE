@@ -235,7 +235,7 @@ router.get('/pregunta_usuario', verifyToken, (req, res) => {
 
 
 //Mostrar datos por codigo
-router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
+router.post("/preguntas_usuario", /*verifyToken,*/ (req, res) => {
     try {
         /*
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
@@ -244,8 +244,7 @@ router.post("/pregunta_usuario/:COD_USUARIO", /*verifyToken,*/ (req, res) => {
             } else {*/
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
                 const { USUARIO } = req.body;
-                console.log(USUARIO);
-                const consulta = `CALL SP_moduloseguridad('MS_PREGUNTA_USUARIO', 'SO', '1', 1, 0, 0, 0, 0, '${USUARIO}', '', '')`;
+                const consulta = `call axe.SP_MS_PREGUNTAS_SEG_USUARIO('${USUARIO}');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -763,7 +762,6 @@ router.get('/roles_objetos', (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
     }
   });
-
 
 
 // Insertar datos
