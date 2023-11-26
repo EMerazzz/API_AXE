@@ -563,16 +563,16 @@ router.post('/usuarios', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que actualiza el registro
-                const { USUARIO, CONTRASENA, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO,Estado_registro } = req.body;
+                const { USUARIO, CONTRASENA, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO,COD_ROL } = req.body;
                 //const { COD_USUARIO } = req.params;
 
                 mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_USUARIOS', 'I', 1, 0, ?, ?, 1, 1, ?, ? , ?)",
-                    [COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR,Estado_registro],
+                    "call axe.SP_moduloseguridad('MS_USUARIOS', 'I', 1, ?, ?, ?, 1, 1, ?, ?, ?);",
+                    [COD_ROL,COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR],
                     (err, rows, fields) => {
                         if (!err) {
                             // Retornar lo actualizado
-                            res.status(200).json(req.body);
+                            res.status(200).json("exito");
                         } else {
                             console.log(err);
                         }
