@@ -749,6 +749,22 @@ router.get('/roles_objetos', (req, res) => {
     }
   });
 
+  // Eliminar roles
+  router.put('/del_roles_objetos/:COD_ROL_OBJETO', (req, res) => {
+    try {
+        const { COD_ROL_OBJETO } = req.params;
+        //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('DE', ${COD_ROL_OBJETO}, 1, 1, 1, 1, 1, 1)`;
+        mysqlConnection.query(consulta, (error, results) => {
+            if (error) throw error;
+            res.status(200).json("exito");
+});
+    } catch (catchError) {
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+
+
 
 // Insertar datos
 router.post('/preguntas', verifyToken, (req, res) => {
