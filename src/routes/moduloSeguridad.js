@@ -799,7 +799,7 @@ router.get("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
             mysqlConnection.query(consulta, (error, results) => {
                 if (error) throw error;
                 if (results.length > 0) {
-                    console.log(COD_ROL);
+                    console.log(COD_OBJETO);
                     res.status(200).json(results[0]);
                 } else {
                     res.send(error);
@@ -843,6 +843,74 @@ router.post('/objetos', verifyToken, (req, res) => {
        if (!error) {
          res.json({
            Status: "Objeto modificado exitosamente"
+         });
+       } else {
+         console.log(error);
+         res.sendStatus(500);
+       }
+     });
+   } catch (error) {
+     res.send(error);
+   }
+ }); 
+
+// MS PARAMETROS
+//Mostrar todos los datos
+router.get('/parametros', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
+                const consulta = `CALL SP_MS_PARAMETROS('SA','1','1','1','1');`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } else {
+                        res.send(error);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+// INSERTAR
+router.post('/parametros', verifyToken, (req, res) => {
+    const {PARAMETRO,VALOR,USUARIO,FECHA_CREADO,FECHA_MODIFICADO} = req.body;
+    const query = `
+      SET @PARAMETRO = ?;
+      SET @VALOR = ?;
+      SET @USUARIO = ?;
+      CALL SP_MS_PARAMETROS('I','1',@PARAMETRO,@VALOR,@USUARIO)
+    `
+    ;
+    mysqlConnection.query(query, [PARAMETRO],[VALOR],[USUARIO], (err, rows, fields) => {
+      if (!err) {
+        res.json({ status: 'Nueva Parametro ingresado exitosamente' });
+      } else {
+        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+      }
+    });
+  });
+
+  //ACTUALIZAR LOS DATOS
+ // Modificar datos
+ router.put("/parametros/:COD_PARAMETRO", verifyToken, (req, res) => {
+    //Verificación de JWT ya realizada por el middleware verifyToken
+ 
+   try {
+     const { COD_PARAMETRO } = req.params;
+     const {PARAMETRO,USUARIO,VALOR} = req.body;
+     const sql = `CALL SP_MS_PARAMETROS('U',${COD_PARAMETRO},${PARAMETRO},${VALOR}),${USUARIO},`;
+     mysqlConnection.query(sql, error => {
+       if (!error) {
+         res.json({
+           Status: "Parametro modificado exitosamente"
          });
        } else {
          console.log(error);
