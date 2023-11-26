@@ -106,18 +106,20 @@ router.get('/padres_tutores', verifyToken,(req, res) => {
   
 
 //GET por codigo
-router.get("/padres_tutores/:COD_PADRE_TUTOR",verifyToken, (req, res) => {
+router.put("/del_padres_tutores/:COD_PADRE_TUTOR",verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_PADRE_TUTOR } = req.params;
-      const sql = `Call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES','SO','${COD_PADRE_TUTOR}','1','null','null','null','null','null')`;
+      const sql = `Call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES','DE','${COD_PADRE_TUTOR}','1','null','null','null','null','null')`;
       mysqlConnection.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length > 0) {
-          res.status(200).json(results[0]);
+        if (!error) {
+          res.json({
+            Status: "Usuario Eliminado"
+          });
         } else {
-          res.send(error);
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar Usuario" });
         }
       });
     } catch (error) {
