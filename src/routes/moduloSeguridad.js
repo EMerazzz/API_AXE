@@ -860,26 +860,30 @@ router.post('/objetos', verifyToken, (req, res) => {
   });
   
 
-  // Modificar datos
   router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
-    //Verificación de JWT ya realizada por el middleware verifyToken
- 
-   try {
-     const { COD_OBJETO } = req.params;
-     const {OBJETO,DESCRIPCION,TIPO_OBJETO} = req.body;
-     const sql = `CALL SP_MS_OBJETOS(${COD_OBJETO},${OBJETO}),${DESCRIPCION},${TIPO_OBJETO},'U'`;
-     mysqlConnection.query(sql, error => {
-       if (!error) {
-         res.json({
-           Status: "Objeto modificado exitosamente"
-         });
-       } else {
-         console.log(error);
-         res.sendStatus(500);
-       }
-     });
-   } catch (error) {
-     res.send(error);
-   }
- });
-module.exports = router;
+    // Verificación de JWT ya realizada por el middleware verifyToken
+  
+    try {
+      const { COD_OBJETO } = req.params;
+      const { OBJETO, DESCRIPCION, TIPO_OBJETO } = req.body;
+      
+      // Corrección en la construcción de la consulta SQL
+      const sql = `CALL SP_MS_OBJETOS('${COD_OBJETO}','${OBJETO}','${DESCRIPCION}','${TIPO_OBJETO}','U')`;
+    
+      mysqlConnection.query(sql, (error) => {
+        if (!error) {
+          res.json({
+            Status: "Objeto modificado exitosamente",
+          });
+        } else {
+          console.log(error);
+          res.sendStatus(500);
+        }
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  });
+  
+  module.exports = router;
+  
