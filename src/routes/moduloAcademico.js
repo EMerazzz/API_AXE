@@ -21,18 +21,20 @@ router.get('/asignaturas', verifyToken, (req, res) => {
 });
 
 //GET por codigo
-router.get("/asignaturas/:COD_ASIGNATURA", verifyToken, (req, res) => {
+router.put("/del_asignaturas/:COD_ASIGNATURA", verifyToken, (req, res) => {
     try {
         const { COD_ASIGNATURA } = req.params;
-        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','SO','${COD_ASIGNATURA}','1','1','null')`;
+        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','DE','${COD_ASIGNATURA}','1','1','null')`;
         mysqlConnection.query(sql, (error, results) => {
-            if (error) throw error;
-            if (results.length > 0) {
-                res.status(200).json(results[0]);
-            } else {
-                res.send(error);
-            }
-        })
+            if (!error) {
+                res.json({
+                  Status: "Asignatura Eliminada"
+                });
+              } else {
+                console.log(error);
+                res.status(500).json({ message: "Error al Eliminar Asignatura" });
+              }
+        });
     } catch (error) {
         res.send(error);
     }
@@ -95,18 +97,20 @@ router.get('/jornadas', verifyToken, (req, res) => {
 });
 
 //GET por codigo
-router.get("/jornadas/:COD_JORNADA", verifyToken, (req, res) => {
+router.put("/del_jornadas/:COD_JORNADA", verifyToken, (req, res) => {
     try {
         const { COD_JORNADA } = req.params;
-        const sql = `Call SP_moduloAcademico('MA_JORNADA','SO','${COD_JORNADA}','1','1','null')`;
+        const sql = `Call SP_moduloAcademico('MA_JORNADA','DE','${COD_JORNADA}','1','1','null')`;
         mysqlConnection.query(sql, (error, results) => {
-            if (error) throw error;
-            if (results.length > 0) {
-                res.status(200).json(results[0]);
-            } else {
-                res.send(error);
-            }
-        })
+            if (!error) {
+                res.json({
+                  Status: "Jornada Eliminada"
+                });
+              } else {
+                console.log(error);
+                res.status(500).json({ message: "Error al Eliminar Jornada" });
+              }
+        });
     } catch (error) {
         res.send(error);
     }
@@ -172,22 +176,25 @@ router.get('/anio_academico', verifyToken, (req, res) => {
   
   
 //GET por codigo
-  router.get('/anio_academico/:COD_ANIO_ACADEMICO', verifyToken,  (req, res) => {
+router.put('/del_anio_academico/:COD_ANIO_ACADEMICO', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_ANIO_ACADEMICO } = req.params;
     const query = `
-      Call SP_moduloAcademico('MA_ANIO_ACADEMICO','SO',?,'1','1','null');
+        Call SP_moduloAcademico('MA_ANIO_ACADEMICO','DE',?,'1','1','null');
     `;
-  
+
     mysqlConnection.query(query, [COD_ANIO_ACADEMICO], (err, rows) => {
-      if (!err) {
-        res.json(rows[0]);
-      } else {
-        console.log(err);
-        res.sendStatus(500);
-      }
+        if (!err) {
+            res.json({
+                Status: "Año Academico Eliminado"
+            });
+        } else {
+            console.log(err);
+            res.status(500).json({ message: "Error al Eliminar Año Academico" });
+        }
     });
-  });
+});
+
 
   //Metodo Post
 router.post("/anio_academico", verifyToken, (req, res) => {
@@ -306,21 +313,23 @@ router.get('/nivel_academico', verifyToken, (req, res) => {
 
 
 //GET por codigo
-router.get("/nivel_academico/:COD_NIVEL_ACADEMICO", verifyToken, (req, res) => {
+router.put("/del_nivel_academico/:COD_NIVEL_ACADEMICO", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
                 res.sendStatus(403);
             } else {
                 const { COD_NIVEL_ACADEMICO } = req.params;
-                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','SO','${COD_NIVEL_ACADEMICO}','1','1','null')`;
+                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','DE','${COD_NIVEL_ACADEMICO}','1','1','null')`;
                 mysqlConnection.query(sql, (error, results) => {
-                    if (error) throw error;
-                    if (results.length > 0) {
-                        res.status(200).json(results[0]);
-                    } else {
-                        res.send(error);
-                    }
+                    if (!error) {
+                        res.json({
+                          Status: "Nivel Academico Eliminado"
+                        });
+                      } else {
+                        console.log(error);
+                        res.status(500).json({ message: "Error al Eliminar Nivel Academico" });
+                      }
                 });
             }
         });
@@ -407,21 +416,23 @@ router.get('/Secciones', verifyToken, (req, res) => {
 });
 
 //GET por codigo
-router.get("/Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
+router.put("/del_Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
                 res.sendStatus(403);
             } else {
                 const { COD_SECCIONES } = req.params;
-                const sql = `Call SP_moduloAcademico('MA_SECCIONES','SO','${COD_SECCIONES}','1','1','null')`;
+                const sql = `Call SP_moduloAcademico('MA_SECCIONES','DE','${COD_SECCIONES}','1','1','null')`;
                 mysqlConnection.query(sql, (error, results) => {
-                    if (error) throw error;
-                    if (results.length > 0) {
-                        res.status(200).json(results[0]);
-                    } else {
-                        res.send(error);
-                    }
+                    if (!error) {
+                        res.json({
+                          Status: "Sección Eliminada"
+                        });
+                      } else {
+                        console.log(error);
+                        res.status(500).json({ message: "Error al Eliminar Sección" });
+                      }
                 });
             }
         });

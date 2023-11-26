@@ -35,21 +35,25 @@ router.get('/docentes', verifyToken, (req, res) => {
 });
 
 //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE
-router.get('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
-          // Verificación de JWT ya realizada por el middleware verifyToken
-    const { COD_DOCENTE } = req.params;
-    const query = `
-
-    CALL AXE.SP_modulodocentes('MD_DOCENTES', 'SO',?,0,0,0,'0','0','0','1');
+router.put('/del_docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
+  const { COD_DOCENTE } = req.params;
+  const query = `
+      CALL AXE.SP_modulodocentes('MD_DOCENTES', 'DE',?,0,0,0,'0','0','0','1');
   `;
+
   mysqlConnection.query(query, [COD_DOCENTE], (err, rows, fields) => {
-    if (!err) {
-      res.json(rows[0]);
-    } else {
-      console.log(err);
-    }
+      if (!err) {
+          res.json({
+              Status: "Docente Eliminado"
+          });
+      } else {
+          console.log(err);
+          res.status(500).json({ message: "Error al Eliminar Docente" });
+      }
   });
 });
+
 
 //INSERTAR DATOS EN LA TABLA DE MD_DOCENTES
 router.post('/docentes', /*verifyToken,*/ (req, res) => {
@@ -127,21 +131,25 @@ router.get('/docentes_asignaturas', verifyToken,  (req, res) => {
     
    
   //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE_ASIGNATURA
-  router.get('/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  verifyToken, (req, res) => {
-            // Verificación de JWT ya realizada por el middleware verifyToken
+  router.put('/del_docentes_asignaturas/:COD_DOCENTE_ASIGNATURA',  verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
     const { COD_DOCENTE_ASIGNATURA } = req.params;
     const query = `
-  
-    CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'SO',?, 0,0,0,'0','0','0','1');
-  `;
-  mysqlConnection.query(query, [COD_DOCENTE_ASIGNATURA], (err, rows, fields) => {
-    if (!err) {
-      res.json(rows[0]);
-    } else {
-      console.log(err);
-    }
-  });
-  });
+        CALL SP_modulodocentes('MDA_DOCENTES_ASIGNATURAS', 'DE',?, 0,0,0,'0','0','0','1');
+    `;
+
+    mysqlConnection.query(query, [COD_DOCENTE_ASIGNATURA], (err, rows, fields) => {
+        if (!err) {
+            res.json({
+                Status: "Asignatura Docente Eliminada"
+            });
+        } else {
+            console.log(err);
+            res.status(500).json({ message: "Error al Eliminar Asignatura Docente" });
+        }
+    });
+});
+
    
  
   //INSERTAR DATOS EN LA TABLA DE MDA_DOCENTES_ASIGNATURAS
