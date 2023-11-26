@@ -795,25 +795,25 @@ router.get("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
         res.send(error);
     }
 });
-
-// Insertar datos
+//Insertar
 router.post('/objetos', verifyToken, (req, res) => {
-    const {OBJETO,DESCRIPCION,TIPO_OBJETO } = req.body;
+    const { OBJETO, DESCRIPCION, TIPO_OBJETO } = req.body;
     const query = `
       SET @OBJETO = ?;
       SET @DESCRIPCION = ?;
-      SET @PTIPO_OBJETO = ?;
-      CALL SP_MS_OBJETOS('1','@OBJETO', @DESCRIPCION, @TIPO_OBJETO, 'I')
-    `
-    ;
-    mysqlConnection.query(query, [OBJETO],[DESCRIPCION],[TIPO_OBJETO], (err, rows, fields) => {
+      SET @TIPO_OBJETO = ?;  -- Corregido: el nombre del parámetro estaba mal escrito
+      CALL SP_MS_OBJETOS('1', @OBJETO, @DESCRIPCION, @TIPO_OBJETO, 'I');  -- Corregido: eliminado el signo de interrogación antes de @OBJETO
+    `;
+    mysqlConnection.query(query, [OBJETO, DESCRIPCION, TIPO_OBJETO], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nuevo Objeto ingresado exitosamente' });
       } else {
+        console.error(err);  // Imprimir el error en la consola para ayudar en la depuración
         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
       }
     });
   });
+  
 
   // Modificar datos
   router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
