@@ -929,12 +929,12 @@ router.get('/parametros', verifyToken, (req, res) => {
 
 // INSERTAR
 router.post('/parametros', verifyToken, (req, res) => {
-    const {PARAMETRO,VALOR,USUARIO,FECHA_CREADO,FECHA_MODIFICADO} = req.body;
+    const {PARAMETRO,VALOR,USUARIO} = req.body;
     const query = `
       SET @PARAMETRO = ?;
       SET @VALOR = ?;
       SET @USUARIO = ?;
-      CALL SP_MS_PARAMETROS1('I','1',@PARAMETRO,@VALOR,@USUARIO)
+      CALL SP_MS_PARAMETROS1('I','1',@PARAMETRO,@VALOR,@USUARIO);
     `
     ;
     mysqlConnection.query(query, [PARAMETRO],[VALOR],[USUARIO], (err, rows, fields) => {
@@ -954,7 +954,7 @@ router.post('/parametros', verifyToken, (req, res) => {
    try {
      const { COD_PARAMETRO } = req.params;
      const {PARAMETRO,USUARIO,VALOR} = req.body;
-     const sql = `CALL SP_MS_PARAMETROS1('U',${COD_PARAMETRO},${PARAMETRO},${VALOR}),${USUARIO})`;
+     const sql = `CALL SP_MS_PARAMETROS1('U',${COD_PARAMETRO},${PARAMETRO},${VALOR},${USUARIO})`;
      mysqlConnection.query(sql, error => {
        if (!error) {
          res.json({
