@@ -811,48 +811,51 @@ router.get("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
         res.send(error);
     }
 });
-
-// Insertar datos
+//Insertar
 router.post('/objetos', verifyToken, (req, res) => {
-    const {OBJETO,DESCRIPCION,TIPO_OBJETO } = req.body;
+    const { OBJETO, DESCRIPCION, TIPO_OBJETO } = req.body;
     const query = `
       SET @OBJETO = ?;
       SET @DESCRIPCION = ?;
-      SET @PTIPO_OBJETO = ?;
-      CALL SP_MS_OBJETOS('1','@OBJETO', @DESCRIPCION, @TIPO_OBJETO, 'I')
-    `
-    ;
-    mysqlConnection.query(query, [OBJETO],[DESCRIPCION],[TIPO_OBJETO], (err, rows, fields) => {
+      SET @TIPO_OBJETO = ?;  -- Corregido: el nombre del parámetro estaba mal escrito
+      CALL SP_MS_OBJETOS('1', @OBJETO, @DESCRIPCION, @TIPO_OBJETO, 'I');  -- Corregido: eliminado el signo de interrogación antes de @OBJETO
+    `;
+    mysqlConnection.query(query, [OBJETO, DESCRIPCION, TIPO_OBJETO], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nuevo Objeto ingresado exitosamente' });
       } else {
+        console.error(err);  // Imprimir el error en la consola para ayudar en la depuración
         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
       }
     });
   });
+  
+  router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
+  
+    try {
+      const { COD_OBJETO } = req.params;
+      const { OBJETO, DESCRIPCION, TIPO_OBJETO } = req.body;
+      
+      // Corrección en la construcción de la consulta SQL
+      const sql = `CALL SP_MS_OBJETOS('${COD_OBJETO}','${OBJETO}','${DESCRIPCION}','${TIPO_OBJETO}','U')`;
+    
+      mysqlConnection.query(sql, (error) => {
+        if (!error) {
+          res.json({
+            Status: "Objeto modificado exitosamente",
+          });
+        } else {
+          console.log(error);
+          res.sendStatus(500);
+        }
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  });
 
-  // Modificar datos
-   router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
-    //Verificación de JWT ya realizada por el middleware verifyToken
- 
-   try {
-     const { COD_OBJETO } = req.params;
-     const {OBJETO,DESCRIPCION,TIPO_OBJETO} = req.body;
-     const sql = `CALL SP_MS_OBJETOS(${COD_OBJETO},${OBJETO}),${DESCRIPCION},${TIPO_OBJETO},'U'`;
-     mysqlConnection.query(sql, error => {
-       if (!error) {
-         res.json({
-           Status: "Objeto modificado exitosamente"
-         });
-       } else {
-         console.log(error);
-         res.sendStatus(500);
-       }
-     });
-   } catch (error) {
-     res.send(error);
-   }
- }); 
+  
 
 // MS PARAMETROS
 //Mostrar todos los datos
@@ -906,7 +909,7 @@ router.post('/parametros', verifyToken, (req, res) => {
    try {
      const { COD_PARAMETRO } = req.params;
      const {PARAMETRO,USUARIO,VALOR} = req.body;
-     const sql = `CALL SP_MS_PARAMETROS('U',${COD_PARAMETRO},${PARAMETRO},${VALOR}),${USUARIO},`;
+     const sql = `CALL SP_MS_PARAMETROS('U',${COD_PARAMETRO},${PARAMETRO},${VALOR}),${USUARIO})`;
      mysqlConnection.query(sql, error => {
        if (!error) {
          res.json({
@@ -921,4 +924,9 @@ router.post('/parametros', verifyToken, (req, res) => {
      res.send(error);
    }
  }); 
-module.exports = router;
+
+  
+  
+  module.exports = router;
+  
+
