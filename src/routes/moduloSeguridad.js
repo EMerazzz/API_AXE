@@ -704,12 +704,12 @@ router.post('/preguntas', verifyToken, (req, res) => {
 
   //Actualizar un Registro
   router.put("/preguntas/:COD_PREGUNTA", verifyToken, (req, res) => {
-    // Verificación de JWT ya realizada por el middleware verifyToken
+     //Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_PREGUNTA } = req.params;
       const {PREGUNTA} = req.body;
-      const sql = `CALL SP_MS_PREGUNTAS('U', ${COD_PREGUNTA},${PREGUNTA});`;
+      const sql = `CALL SP_MS_PREGUNTAS('U', ${COD_PREGUNTA},${PREGUNTA})`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -725,4 +725,96 @@ router.post('/preguntas', verifyToken, (req, res) => {
     }
   });
 
+
+// ******************* Preguntas de seguridad Milton (OBJETOS)
+//Mostrar todos los datos
+router.get('/objetos', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
+                const consulta = `CALL SP_MS_OBJETOS('1','1','1','1','SA');`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } else {
+                        res.send(error);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+//Mostrar datos por codigo
+router.get("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
+    try {
+        const { COD_OBJETO } = req.params;
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          if (err) {
+            res.sendStatus(403); // Token inválido o expirado
+          } else {
+            const consulta = `CALL SP_MS_OBJETOS('${COD_OBJETO}', '1', '1', '1', 'SP');`;
+            mysqlConnection.query(consulta, (error, results) => {
+                if (error) throw error;
+                if (results.length > 0) {
+                    console.log(COD_ROL);
+                    res.status(200).json(results[0]);
+                } else {
+                    res.send(error);
+                }
+            });
+          }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+// Insertar datos
+router.post('/objetos', verifyToken, (req, res) => {
+    const {OBJETO,DESCRIPCION,TIPO_OBJETO } = req.body;
+    const query = `
+      SET @OBJETO = ?;
+      SET @DESCRIPCION = ?;
+      SET @PTIPO_OBJETO = ?;
+      CALL SP_MS_OBJETOS('1','@OBJETO', @DESCRIPCION, @TIPO_OBJETO, 'I')
+    `
+    ;
+    mysqlConnection.query(query, [OBJETO],[DESCRIPCION],[TIPO_OBJETO], (err, rows, fields) => {
+      if (!err) {
+        res.json({ status: 'Nuevo Objeto ingresado exitosamente' });
+      } else {
+        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+      }
+    });
+  });
+
+  // Modificar datos
+  router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
+    //Verificación de JWT ya realizada por el middleware verifyToken
+ 
+   try {
+     const { COD_OBJETO } = req.params;
+     const {OBJETO,DESCRIPCION,TIPO_OBJETO} = req.body;
+     const sql = `CALL SP_MS_OBJETOS(${COD_OBJETO},${OBJETO}),${DESCRIPCION},${TIPO_OBJETO},'U'`;
+     mysqlConnection.query(sql, error => {
+       if (!error) {
+         res.json({
+           Status: "Objeto modificado exitosamente"
+         });
+       } else {
+         console.log(error);
+         res.sendStatus(500);
+       }
+     });
+   } catch (error) {
+     res.send(error);
+   }
+ });
 module.exports = router;
