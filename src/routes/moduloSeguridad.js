@@ -943,46 +943,56 @@ router.get('/parametros', verifyToken, (req, res) => {
 
 // INSERTAR
 router.post('/parametros', verifyToken, (req, res) => {
-    const {PARAMETRO,VALOR,USUARIO} = req.body;
+    const { PARAMETRO, VALOR, USUARIO } = req.body;
     const query = `
       SET @PARAMETRO = ?;
       SET @VALOR = ?;
       SET @USUARIO = ?;
       CALL SP_MS_PARAMETROS1('I','1',@PARAMETRO,@VALOR,@USUARIO);
-    `
-    ;
-    mysqlConnection.query(query, [PARAMETRO],[VALOR],[USUARIO], (err, rows, fields) => {
+    `;
+  
+    mysqlConnection.query(query, [PARAMETRO, VALOR, USUARIO], (err, rows, fields) => {
       if (!err) {
-        res.json({ status: 'Nueva Parametro ingresado exitosamente' });
+        res.json({ status: 'Nuevo parámetro ingresado exitosamente' });
       } else {
+        console.error(err);
         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
       }
     });
   });
+  
 
   //ACTUALIZAR LOS DATOS
  // Modificar datos
  router.put("/parametros/:COD_PARAMETRO", verifyToken, (req, res) => {
-    //Verificación de JWT ya realizada por el middleware verifyToken
- 
-   try {
-     const { COD_PARAMETRO } = req.params;
-     const {PARAMETRO,USUARIO,VALOR} = req.body;
-     const sql = `CALL SP_MS_PARAMETROS1('U',${COD_PARAMETRO},${PARAMETRO},${VALOR},${USUARIO})`;
-     mysqlConnection.query(sql, error => {
-       if (!error) {
-         res.json({
-           Status: "Parametro modificado exitosamente"
-         });
-       } else {
-         console.log(error);
-         res.sendStatus(500);
-       }
-     });
-   } catch (error) {
-     res.send(error);
-   }
- }); 
+    try {
+      const { COD_PARAMETRO } = req.params;
+      const { PARAMETRO, USUARIO, VALOR } = req.body;
+  
+      // Utilizar consultas preparadas para evitar inyecciones de SQL
+      const sql = "CALL SP_MS_PARAMETROS1(?, ?, ?, ?, ?)";
+  
+      // Utilizar un array para los valores de los parámetros
+      const values = ['U', COD_PARAMETRO, PARAMETRO, VALOR, USUARIO];
+  
+      mysqlConnection.query(sql, values, (error) => {
+        if (!error) {
+          res.json({
+            Status: "Parámetro modificado exitosamente"
+          });
+        } else {
+          console.error(error);
+          res.sendStatus(500);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(500);
+    }
+  });
+  
+  
+  
 
   
   
