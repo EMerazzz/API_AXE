@@ -847,22 +847,23 @@ router.get('/objetos', verifyToken, (req, res) => {
 });
 
 //Mostrar datos por codigo
-router.get("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
+router.put("/del_objetos/:COD_OBJETO", verifyToken, (req, res) => {
     try {
         const { COD_OBJETO } = req.params;
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
           if (err) {
             res.sendStatus(403); // Token inválido o expirado
           } else {
-            const consulta = `CALL SP_MS_OBJETOS('${COD_OBJETO}', '1', '1', '1', 'SP');`;
+            const consulta = `CALL SP_MS_OBJETOS('${COD_OBJETO}', '1', '1', '1', 'DE');`;
             mysqlConnection.query(consulta, (error, results) => {
-                if (error) throw error;
-                if (results.length > 0) {
-                    console.log(COD_OBJETO);
-                    res.status(200).json(results[0]);
-                } else {
-                    res.send(error);
-                }
+                if (!error) {
+                    res.json({
+                      Status: "Objeto Eliminado"
+                    });
+                  } else {
+                    console.log(error);
+                    res.status(500).json({ message: "Error al Eliminar Objeto" });
+                  }
             });
           }
         });
