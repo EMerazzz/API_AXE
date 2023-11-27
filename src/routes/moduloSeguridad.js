@@ -798,6 +798,30 @@ router.post('/preguntas', verifyToken, (req, res) => {
       }
     });
   });
+
+
+   router.put("/del_preguntas/:COD_PREGUNTA",verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
+  
+    try {
+      const { COD_PREGUNTA } = req.params;
+      const sql = `CALL SP_MS_PREGUNTAS('DE',${COD_PREGUNTA}, '1')`;
+      mysqlConnection.query(sql, (error, results) => {
+        if (!error) {
+          res.json({
+            Status: "Pregunta Eliminada"
+          });
+        } else {
+          console.log(error);
+          res.status(500).json({ message: "Error al Eliminar " });
+        }
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  });
+
+
   /* router.put("/preguntas/:COD_PREGUNTA", verifyToken, (req, res) => {
      //Verificación de JWT ya realizada por el middleware verifyToken
   
@@ -846,7 +870,7 @@ router.get('/objetos', verifyToken, (req, res) => {
     }
 });
 
-//Mostrar datos por codigo
+//Mostrar datos por codigo 
 router.put("/del_objetos/:COD_OBJETO", verifyToken, (req, res) => {
     try {
         const { COD_OBJETO } = req.params;
