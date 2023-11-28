@@ -1014,12 +1014,7 @@ router.post('/parametros', verifyToken, (req, res) => {
       console.error(error);
       res.sendStatus(500);
     }
-  });
-  
-  
-  
-
-  
+  }); 
   
   module.exports = router;
   

@@ -38,7 +38,8 @@ router.get('/personas', verifyToken, (req, res) => {
         //   if (err) {
          //      res.sendStatus(403);
           //  } else {
-    mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
+           // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
+    mysqlConnection.query(`call axe.personas_lic('SA', '1', '1', '1', '1', '1', '1', 1, '2012-07-23', '1', '1', '11', '1', '', '1', '1', '1', '1', '1', '1');`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
