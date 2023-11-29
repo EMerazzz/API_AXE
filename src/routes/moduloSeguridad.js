@@ -820,30 +820,6 @@ router.post('/preguntas', verifyToken, (req, res) => {
     }
   });
 
-
-  /* router.put("/preguntas/:COD_PREGUNTA", verifyToken, (req, res) => {
-     //Verificación de JWT ya realizada por el middleware verifyToken
-  
-    try {
-      const { COD_PREGUNTA } = req.params;
-      const {PREGUNTA} = req.body;
-      const sql = `CALL SP_MS_PREGUNTAS('U', ${COD_PREGUNTA},${PREGUNTA})`;
-      mysqlConnection.query(sql, error => {
-        if (!error) {
-          res.json({
-            Status: "Pregunta modificada exitosamente"
-          });
-        } else {
-          console.log(error);
-          res.sendStatus(500);
-        }
-      });
-    } catch (error) {
-      res.send(error);
-    }
-  }); */
-
-
 // ******************* Preguntas de seguridad Milton (OBJETOS)
 //Mostrar todos los datos
 router.get('/objetos', verifyToken, (req, res) => {
@@ -1016,8 +992,36 @@ router.post('/parametros', verifyToken, (req, res) => {
   }); 
   
 
+//Mostrar todos los datos
+router.get('/ESTADO_BITACORA', /*verifyToken,*/ (req, res) => {
+    try {
+        /*
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
+                */
+                const consulta = `SELECT VALOR FROM MS_ESTADO_BITACORA;`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0){
+                        res.status(200).json(results[0]);
+                    } else {
+                        res.send(error);
+                    }
+                });
+                /*
+            }
+        });*/
+    } catch (error) {
+        res.send(error);
+    }
+});
 
 
+
+// zona de activar y desactivar bitacora
   router.post('/triggers_new', verifyToken, (req, res) => {
     const query = `
     DROP TRIGGER IF EXISTS TRIGGER_BITACORA_UPDATE_ME_PADRES_TUTORES1;
@@ -1369,6 +1373,9 @@ BEGIN
         NEW.DESCRIPCION_SECCIONES, NEW.Estado_registro, NULL, NULL, NULL, NULL, NULL, NULL, NULL
     );
 END;
+
+UPDATE MS_ESTADO_BITACORA SET ESTADO_BITACORA = 'ACTIVO', VALOR = 1 
+WHERE COD_ESTADO_BITACORA = 1;
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
       if (!err) {
@@ -1380,6 +1387,8 @@ END;
     });
   });
 
+
+  
 
   router.post('/triggers_delete', verifyToken, (req, res) => {
     const query = `
@@ -1401,6 +1410,9 @@ END;
     DROP TRIGGER IF EXISTS TRIGGER_BITACORA_UPDATE_MA_NIVEL_ACADEMICO1;
     DROP TRIGGER IF EXISTS TRIGGER_BITACORA_UPDATE_MA_SECCIONES1;
 
+
+    UPDATE MS_ESTADO_BITACORA SET ESTADO_BITACORA = 'INACTIVO', VALOR = 0 
+    WHERE COD_ESTADO_BITACORA = 1;
 
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
