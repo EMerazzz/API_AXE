@@ -719,9 +719,9 @@ router.get('/roles_objetos', (req, res) => {
 // Insertar objetos
   router.post('/roles_objetos', (req, res) => {
     try {
-        const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR } = req.body;
+        const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR, MODIFICADO_POR } = req.body;
         
-        const consulta = `CALL SP_MS_ROLES_PERMISOS('I', 1,${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR})`;
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('I', 1,${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR}, ${MODIFICADO_POR})`;
         mysqlConnection.query(consulta, (error, results) => {
             if (error) throw error;
             res.status(200).json("Actualizado");
@@ -735,9 +735,9 @@ router.get('/roles_objetos', (req, res) => {
   router.put('/roles_objetos/:COD_ROL_OBJETO', (req, res) => {
     try {
         const { COD_ROL_OBJETO } = req.params;
-        const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR } = req.body;
+        const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR, MODIFICADO_POR } = req.body;
         //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
-        const consulta = `CALL SP_MS_ROLES_PERMISOS('U', ${COD_ROL_OBJETO}, ${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR})`;
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('U', ${COD_ROL_OBJETO}, ${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR}, ${MODIFICADO_POR})`;
         mysqlConnection.query(consulta, (error, results) => {
             if (error) throw error;
             res.status(200).json("exito");
