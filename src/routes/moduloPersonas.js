@@ -31,8 +31,8 @@ router.post("/INSpersonas", verifyToken, (req, res) => {
 });
 
 /*************************TABLA PERSONAS ************************** */
-//MOTRAR DATOS DE LA TABLA DE ASIGNATURAS
-router.get('/personas', verifyToken, (req, res) => {
+
+router.get('/GETpersonas', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
  //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
         //   if (err) {
@@ -40,6 +40,24 @@ router.get('/personas', verifyToken, (req, res) => {
           //  } else {
            // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
     mysqlConnection.query(`call axe.personas_lic('SA', '1', '1', '1', '1', '1', '1', 1, '2012-07-23', '1', '1', '11', '1', '', '1', '1', '1', '1', '1', '1');`, (err, rows) => {
+      if (!err) {
+        res.status(200).json(rows[0]);
+      } else {
+        console.log('Se ha producido un error');
+        res.sendStatus(500);
+      }
+    //});
+    // }
+       });
+  });
+  router.get('/personas', verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
+ //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
+        //   if (err) {
+         //      res.sendStatus(403);
+          //  } else {
+           // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
+            mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
