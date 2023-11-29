@@ -14,7 +14,7 @@ router.post("/INSpersonas", verifyToken, (req, res) => {
   try {
     
     const {USUARIO_MODIFICADOR, NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,TELEFONO,TIPO_TELEFONO, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO_CONTACTO,RELACION,CORREO_ELECTRONICO,Estado_registro } = req.body;
-    const sql = `call axe.personas_lic('I','${USUARIO_MODIFICADOR}','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}');`;
+    const sql = `call axe.personas_lic('I','${USUARIO_MODIFICADOR}','1','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}');`;
     mysqlConnection.query(sql, error => {
       if (!error) {
         res.json({
@@ -33,11 +33,7 @@ router.post("/INSpersonas", verifyToken, (req, res) => {
 /*************************TABLA PERSONAS ************************** */
 
 router.get('/GETpersonas', verifyToken, (req, res) => {
-    // Verificación de JWT ya realizada por el middleware verifyToken
- //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
-        //   if (err) {
-         //      res.sendStatus(403);
-          //  } else {
+  
            // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
     mysqlConnection.query(`call axe.personas_lic('SA', '1','1','1', '1', '1', '1', '1', 1, '2012-07-23', '1', '1', '11', '1', '', '1', '1', '1', '1', '1', '1');`, (err, rows) => {
       if (!err) {
@@ -46,16 +42,11 @@ router.get('/GETpersonas', verifyToken, (req, res) => {
         console.log('Se ha producido un error');
         res.sendStatus(500);
       }
-    //});
-    // }
+  
        });
   });
   router.get('/personas', verifyToken, (req, res) => {
-    // Verificación de JWT ya realizada por el middleware verifyToken
- //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
-        //   if (err) {
-         //      res.sendStatus(403);
-          //  } else {
+  
            // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
             mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
       if (!err) {
@@ -64,8 +55,7 @@ router.get('/GETpersonas', verifyToken, (req, res) => {
         console.log('Se ha producido un error');
         res.sendStatus(500);
       }
-    //});
-    // }
+    
        });
   });
   //GET por codigo
@@ -138,8 +128,8 @@ router.post("/personas", verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA } = req.params;
-      const {  NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA ,USUARIO_MODIFICADOR, Estado_registro} = req.body;
-      const sql = `Call SP_MP_PERSONAS('MP_PERSONAS','U','${COD_PERSONA}','1','${NOMBRE}','${APELLIDO}','${IDENTIDAD}','${GENERO}','${TIPO_PERSONA}','${EDAD}','${FECHA_NACIMIENTO}','${USUARIO_MODIFICADOR}')`;
+      const {USUARIO_MODIFICADOR, NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,TELEFONO,TIPO_TELEFONO, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO_CONTACTO,RELACION,CORREO_ELECTRONICO,Estado_registro } = req.body;
+      const sql = `call axe.personas_lic('U','${USUARIO_MODIFICADOR}','${COD_PERSONA}','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}');`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
