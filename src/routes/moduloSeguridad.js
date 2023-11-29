@@ -1020,6 +1020,33 @@ router.get('/ESTADO_BITACORA', /*verifyToken,*/ (req, res) => {
 });
 
 
+router.get('/LIMPIAR_BITACORA', /*verifyToken,*/ (req, res) => {
+    try {
+        /*
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
+                */
+                const consulta = `TRUNCATE TABLE BITACORA;`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0){
+                        res.status(200).json('Bitacora borrada');
+                    } else {
+                        res.send(error);
+                    }
+                });
+                /*
+            }
+        });*/
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
 
 // zona de activar y desactivar bitacora
   router.post('/triggers_new', verifyToken, (req, res) => {
