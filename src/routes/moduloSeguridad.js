@@ -704,7 +704,7 @@ router.post("/permisos_usuario", /*verifyToken,*/ (req, res) => {
 // ROLES - OBJETOS Esta tabla
 router.get('/roles_objetos', (req, res) => {
     try {
-      mysqlConnection.query(`CALL SP_MS_ROLES_PERMISOS('SA', 1, 1, 1, 1, 1, 1, 1);`, (error, results) => {
+      mysqlConnection.query(`CALL SP_MS_ROLES_PERMISOS('SA', 1, 1, 1, 1, 1, 1, 1, 1);`, (error, results) => {
         if (error) {
           res.status(500).json({ error: 'Error interno del servidor' });
         }else{
