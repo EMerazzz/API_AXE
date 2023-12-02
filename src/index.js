@@ -28,9 +28,15 @@ app.use(require('./routes/moduloDocentes'));
 
 app.use(require('./routes/login'));
 
+//Backup-Restore
+app.use(require('./routes/backup-restore'));
+
+
 // Starting the server
 // Starting the server
 app.listen(app.get('port'), '0.0.0.0', () => {
   console.log(`Server listening on port ${app.get('port')}`);
 });
+
+
 
