@@ -1048,6 +1048,123 @@ router.get('/LIMPIAR_BITACORA', /*verifyToken,*/ (req, res) => {
 
 
 
+//********************* TABLA MS_ESTADO_ROLES*******************************
+//MOTRAR DATOS DE LA TABLA 
+router.get('/estado_rol', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la consulta
+                const consulta = `CALL SP_MS_ESTADO_ROLES('MS_ESTADO_ROLES', 'SA', 1,'1','1')`;
+                mysqlConnection.query(consulta, (error, results) => {
+                    if (error) throw error;
+                    if (results.length > 0) {
+                        res.status(200).json(results[0]);
+                    } else {
+                        res.send(error);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
+// Eliminar estado de rol por código
+router.put("/del_estado_rol/:COD_ESTADO_ROL", verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                const { COD_ESTADO_ROL } = req.params;
+                const consulta = `CALL SP_MS_ESTADO_ROLES('MS_ESTADO_ROLES', 'DE', ?, ?, ?)`;
+
+                mysqlConnection.query(consulta, [COD_ESTADO_ROL, null, null], (error, results) => {
+                    if (!error) {
+                        res.json({
+                            Status: "Estado Eliminado"
+                        });
+                    } else {
+                        console.log(error);
+                        res.status(500).json({ message: "Error al Eliminar Estado" });
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
+
+//Agregar un nuevo estado usuario
+router.post('/estado_rol', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la inserción del nuevo estado de usuario
+                const { DESCRIPCION } = req.body;
+                const query = `
+            SET @DESCRIPCION = ?;
+            CALL SP_MS_ESTADO_ROLES('MS_ESTADO_ROLES', 'I', 1,  @DESCRIPCION,'1')
+          `;
+                mysqlConnection.query(query, [DESCRIPCION], (err, rows, fields) => {
+                    if (!err) {
+                        res.json({ status: 'Estado de usuario ingresado' });
+                    } else {
+                        console.log(err);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+//ACTUALIZA REGISTROS
+router.put('/estado_rol/:COD_ESTADO_ROL', verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                // Resto del código que realiza la actualización del estado de usuario
+                const { DESCRIPCION } = req.body;
+                const { COD_ESTADO_ROL } = req.params;
+
+                mysqlConnection.query(
+                    "CALL SP_MS_ESTADO_ROLES('MS_ESTADO_ROLES', 'U', ?, ?, ?)",
+                    [COD_ESTADO_ROL, DESCRIPCION, 'UsuarioModificador'],  // Reemplaza 'UsuarioModificador' con el valor correcto
+                    (err, rows, fields) => {
+                        if (!err) {
+                            // Retornar solo el mensaje indicando que el registro ha sido actualizado
+                            res.status(200).json({ message: 'Registro actualizado con éxito.' });
+                        } else {
+                            console.log(err);
+                            res.status(500).json({ error: 'Error al actualizar el estado de rol.' });
+                        }
+                    }
+                );
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
+
+
+
 // zona de activar y desactivar bitacora
   router.post('/triggers_new', verifyToken, (req, res) => {
     const query = `
