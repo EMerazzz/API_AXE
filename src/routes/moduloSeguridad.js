@@ -716,51 +716,88 @@ router.get('/roles_objetos', (req, res) => {
     }
   });
 
-// Insertar objetos
-  router.post('/roles_objetos', (req, res) => {
+//INSERTAR
+router.post('/roles_objetos', async (req, res) => {
     try {
         const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR, MODIFICADO_POR } = req.body;
-        
-        const consulta = `CALL SP_MS_ROLES_PERMISOS('I', 1,${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR}, ${MODIFICADO_POR})`;
+
+        // Validar los datos de entrada aquí si es necesario
+
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('I', 1, ${COD_ROL}, ${COD_OBJETO}, ${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR}, '${MODIFICADO_POR}')`;
+
         mysqlConnection.query(consulta, (error, results) => {
-            if (error) throw error;
-            res.status(200).json("Actualizado");
-});
+            if (error) {
+                console.error('Error en la consulta:', error);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+
+            res.status(201).json({ message: 'Objeto insertado correctamente' });
+        });
     } catch (catchError) {
-      res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error en el bloque catch:', catchError);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-  });
+});
+
 
   // Modificar objetos
   router.put('/roles_objetos/:COD_ROL_OBJETO', (req, res) => {
     try {
         const { COD_ROL_OBJETO } = req.params;
         const { COD_ROL, COD_OBJETO, PERMISO_INSERCION, PERMISO_ELIMINACION, PERMISO_ACTUALIZACION, PERMISO_CONSULTAR, MODIFICADO_POR } = req.body;
-        //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
-        const consulta = `CALL SP_MS_ROLES_PERMISOS('U', ${COD_ROL_OBJETO}, ${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR}, ${MODIFICADO_POR})`;
+
+        // Validar los datos de entrada aquí si es necesario
+
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('U', ${COD_ROL_OBJETO}, ${COD_ROL}, ${COD_OBJETO},${PERMISO_INSERCION}, ${PERMISO_ELIMINACION}, ${PERMISO_ACTUALIZACION}, ${PERMISO_CONSULTAR}, '${MODIFICADO_POR}')`;
+
         mysqlConnection.query(consulta, (error, results) => {
-            if (error) throw error;
-            res.status(200).json("exito");
-});
+            if (!error) {
+                res.json({
+                  Status: "Rol Objeto Eliminado"
+                });
+              } else {
+                console.log(error);
+                res.status(500).json({ message: "Error al Eliminar Objeto" });
+            }
+        });
     } catch (catchError) {
-      res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error en el bloque catch:', catchError);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-  });
+});
+
+
+
 
   // Eliminar roles
   router.put('/del_roles_objetos/:COD_ROL_OBJETO', (req, res) => {
     try {
         const { COD_ROL_OBJETO } = req.params;
-        //call axe.SP_MS_ROLES_PERMISOS('U', 11, 4, 12, 0, 0, 0, 0);
-        const consulta = `CALL SP_MS_ROLES_PERMISOS('DE', ${COD_ROL_OBJETO}, 1, 1, 1, 1, 1, 1)`;
+
+        // Validar COD_ROL_OBJETO aquí si es necesario
+
+        const consulta = `CALL SP_MS_ROLES_PERMISOS('DE', ${COD_ROL_OBJETO}, 1, 1, 1, 1, 1, 1, '1')`;
+
         mysqlConnection.query(consulta, (error, results) => {
-            if (error) throw error;
-            res.status(200).json("exito");
-});
+            if (error) {
+                console.error('Error en la consulta de eliminación:', error);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+
+            if (results.affectedRows === 0) {
+                // Si no se encuentra el objeto a eliminar
+                return res.status(404).json({ error: 'Objeto no encontrado' });
+            }
+
+            res.status(200).json({ message: 'Objeto eliminado correctamente' });
+        });
     } catch (catchError) {
-      res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error en el bloque catch:', catchError);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-  });
+});
+
+
 
 
 // Insertar datos
@@ -862,7 +899,7 @@ router.put("/del_objetos/:COD_OBJETO", verifyToken, (req, res) => {
                   } else {
                     console.log(error);
                     res.status(500).json({ message: "Error al Eliminar Objeto" });
-                  }
+                }
             });
           }
         });
