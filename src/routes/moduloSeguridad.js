@@ -689,7 +689,7 @@ router.post("/permisos_usuario", /*verifyToken,*/ (req, res) => {
                 const { USUARIO, OBJETO } = req.body;
                 // CALL SP_MS_PERMISOS_USUARIOS('S0','JOSUE', 'BITACORA')
                // const consulta = `CALL SP_MS_PREGUNTAS_SEGURIDAD('${USUARIO}')`;
-                const consulta = `CALL SP_MS_PERMISOS_USUARIOS('SO','${USUARIO}', '${OBJETO}')`;
+                const consulta = `CALL SP_MS_PERMISOS_USUARIOS('${USUARIO}', '${OBJETO}')`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
