@@ -584,15 +584,16 @@ router.post('/usuarios', verifyToken, (req, res) => {
 });
 
 
-//Actualizar registro
+//modificar
 router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
+                // Si hay un error en la verificación del token, enviar una respuesta 403 (Prohibido)
                 res.sendStatus(403);
             } else {
                 // Resto del código que actualiza el registro
-                const { USUARIO, CONTRASENA, PRIMER_INGRESO, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO,Estado_registro } = req.body;
+                const { USUARIO, CONTRASENA, PRIMER_INGRESO, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO, Estado_registro } = req.body;
                 const { COD_USUARIO } = req.params;
 
                 mysqlConnection.query(
@@ -600,19 +601,24 @@ router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
                     [COD_USUARIO, PRIMER_INGRESO, COD_PERSONA, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR],
                     (err, rows, fields) => {
                         if (!err) {
-                            // Retornar lo actualizado
-                            res.status(200).json(req.body);
+                            // Si la actualización es exitosa, devolver los datos actualizados desde la base de datos
+                            res.status(200).json({ message: 'Registro actualizado correctamente', data: rows[0] });
                         } else {
+                            // Si hay un error en la ejecución del procedimiento almacenado, enviar una respuesta de error
                             console.log(err);
+                            res.status(500).json({ error: 'Error en la actualización del registro' });
                         }
                     }
                 );
             }
         });
     } catch (error) {
-        res.send(error);
+        // Si hay un error en el bloque try, enviar una respuesta de error
+        console.error(error);
+        res.status(500).json({ error: 'Error en la actualización del registro' });
     }
 });
+
 //mostrar bitacora
 router.get('/bitacora', verifyToken, (req, res) => {
     try {
