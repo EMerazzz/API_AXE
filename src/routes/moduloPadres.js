@@ -49,7 +49,7 @@ router.post("/estudiantes", verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, COD_PADRE_TUTOR,COD_NIVEL_ACADEMICO, NOMBRE_ESTUDIANTE, APELLIDO_ESTUDIANTE,JORNADA_ESTUDIANTE } = req.body;
-      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','I','1','${COD_PERSONA}','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','1')`;
+      const sql = `Call SP_moduloEstudiantes('ME_ESTUDIANTES','I','1','1','${COD_PADRE_TUTOR}','${COD_NIVEL_ACADEMICO}','${NOMBRE_ESTUDIANTE}','${APELLIDO_ESTUDIANTE}','1')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
