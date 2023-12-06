@@ -47,7 +47,7 @@ router.post("/matricula", verifyToken, (req, res) => {
   
     try {
       const { COD_PERSONA, COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, ESTADO_MATRICULA, JORNADA, SECCION,COD_PADRE_TUTOR,USUARIO_MODIFICADOR,Estado_registro,SEGUNDO_ENCARGADO} = req.body;
-      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'I', 0, ${COD_PERSONA}, ${COD_NIVEL_ACADEMICO}, ${COD_ANIO_ACADEMICO}, '${ESTADO_MATRICULA}', '${JORNADA}', '${SECCION}','${COD_PADRE_TUTOR}','${USUARIO_MODIFICADOR}','${SEGUNDO_ENCARGADO}');`;
+      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'I', 0, ${COD_PERSONA}, ${COD_NIVEL_ACADEMICO}, ${COD_ANIO_ACADEMICO}, '${ESTADO_MATRICULA}', '${JORNADA}', '${SECCION}','${COD_PADRE_TUTOR}','${USUARIO_MODIFICADOR}','1');`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -70,7 +70,7 @@ router.put("/matricula/:COD_MATRICULA", verifyToken, (req, res) => {
     try {
       const { COD_MATRICULA } = req.params;
       const { COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, ESTADO_MATRICULA, JORNADA, SECCION ,COD_PADRE_TUTOR, USUARIO_MODIFICADOR, Estado_registro,SEGUNDO_ENCARGADO} = req.body;
-      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'U', ${COD_MATRICULA}, 1, ${COD_NIVEL_ACADEMICO}, ${COD_ANIO_ACADEMICO}, '${ESTADO_MATRICULA}', '${JORNADA}', '${SECCION}','${COD_PADRE_TUTOR}','${USUARIO_MODIFICADOR}','${SEGUNDO_ENCARGADO}');`;
+      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'U', ${COD_MATRICULA}, 1, ${COD_NIVEL_ACADEMICO}, ${COD_ANIO_ACADEMICO}, '${ESTADO_MATRICULA}', '${JORNADA}', '${SECCION}','${COD_PADRE_TUTOR}','${USUARIO_MODIFICADOR}','1');`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
