@@ -376,6 +376,31 @@ router.post('/cuenta_preguntas', /*verifyToken,*/ (req, res) => {
     }
 });
 
+router.post('/cuenta_preguntas1', /*verifyToken,*/ (req, res) => {
+    try {
+        //jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+             //   res.sendStatus(403);
+            //} else {
+                // Resto del código que realiza la inserción de la pregunta de contraseña
+                const { COD_USUARIO, USUARIO } = req.body;
+                const query = `                
+            CALL MS_CUENTA_PREGUNTAS1(?, ?);
+          `;
+                mysqlConnection.query(query, [USUARIO, COD_USUARIO], (err, results) => {
+                    if (!err) {
+                        res.status(200).json(results[0][0]);
+                    } else {
+                        console.log(err);
+                    }
+                });
+          //  }
+      //  });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 
 
 //Actualizar registro
