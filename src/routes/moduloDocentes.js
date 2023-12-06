@@ -58,7 +58,7 @@ router.put('/del_docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
 //INSERTAR DATOS EN LA TABLA DE MD_DOCENTES
 router.post('/docentes', /*verifyToken,*/ (req, res) => {
           // Verificación de JWT ya realizada por el middleware verifyToken
-    const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro} = req.body;
+    const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro, HORAS_SEMANALES} = req.body;
    
     const query = `
 
@@ -69,9 +69,9 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
       SET @USUARIO_MODIFICADOR = ?;
 
       
-      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA,0,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR);
+      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA, @HORAS_SEMANALES,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR);
     `;
-    mysqlConnection.query(query, [COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro], (err, rows, fields) => {
+    mysqlConnection.query(query, [COD_PERSONA, HORAS_SEMANALES,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR], (err, rows, fields) => {
       if(!err) {
         res.json({status: 'DOCENTE Ingresado'});
       } else {
@@ -85,9 +85,10 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
   router.put('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
            // Verificación de JWT ya realizada por el middleware verifyToken 
       const { COD_DOCENTE } = req.params;
-    const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro} = req.body;
+    const {COD_PERSONA, NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR, HORAS_SEMANALES} = req.body;
+    console.log(HORAS_SEMANALES);
     const query = `
-    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,0,0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}') ;
+    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,'${HORAS_SEMANALES}',0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}') ;
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err) {
