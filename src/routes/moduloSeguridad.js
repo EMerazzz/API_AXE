@@ -489,7 +489,8 @@ router.post('/roles', verifyToken, (req, res) => {
     const query = `
       SET @DESCRIPCION = ?;
       SET @MODIFICADO_POR = ?;
-      CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION, @MODIFICADO_POR, '1')
+      SET @Estado_registro = ?;
+      CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, @Estado_registro,  @DESCRIPCION, @MODIFICADO_POR, '1')
     `;
     mysqlConnection.query(query, [DESCRIPCION, MODIFICADO_POR,Estado_registro], (err, rows, fields) => {
       if (!err) {
@@ -507,7 +508,7 @@ router.put('/roles/:COD_ROL', verifyToken, (req, res) => {
   
     mysqlConnection.query(
       "CALL SP_moduloseguridad('ms_roles', 'U', ?, 1, 1, 1, 1, 1,  ?, ? , '1')",
-      [COD_ROL, DESCRIPCION, MODIFICADO_POR, Estado_registro],
+      [COD_ROL, Estado_registro,DESCRIPCION ,MODIFICADO_POR],
       (err, rows, fields) => {
         //CALL SP_moduloseguridad('ms_roles', 'U', 2, 1, 1, 1, 1, 1,  'Usuario Normal','John Wick', '1')
         if (!err) {
