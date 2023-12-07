@@ -14,7 +14,7 @@ router.post("/INSpersonas", verifyToken, (req, res) => {
   try {
     
     const {USUARIO_MODIFICADOR, NOMBRE, APELLIDO, IDENTIDAD, GENERO, TIPO_PERSONA, EDAD, FECHA_NACIMIENTO, FECHA_SALIDA,TELEFONO,TIPO_TELEFONO, DIRECCION, DEPARTAMENTO, CIUDAD, PAIS,NOMBRE_CONTACTO, APELLIDO_CONTACTO, TELEFONO_CONTACTO,RELACION,CORREO_ELECTRONICO,Estado_registro } = req.body;
-    const sql = `call axe.personas_lic('I','${USUARIO_MODIFICADOR}','1','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}');`;
+    const sql = `call axe.personas_lic('I','${USUARIO_MODIFICADOR}','1','${NOMBRE}', '${APELLIDO}', '${IDENTIDAD}', '${GENERO}', '${TIPO_PERSONA}', ${EDAD}, '${FECHA_NACIMIENTO}', '${TELEFONO}', '${TIPO_TELEFONO}', '${DIRECCION}', '${DEPARTAMENTO}', '${CIUDAD}', '${PAIS}', '${NOMBRE_CONTACTO}', '${APELLIDO_CONTACTO}', '${TELEFONO_CONTACTO}', '${RELACION}','${CORREO_ELECTRONICO}', '${Estado_registro}');`;
     mysqlConnection.query(sql, error => {
       if (!error) {
         res.json({
@@ -35,7 +35,7 @@ router.post("/INSpersonas", verifyToken, (req, res) => {
 router.get('/GETpersonas', verifyToken, (req, res) => {
   
            // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
-    mysqlConnection.query(`call axe.personas_lic('SA', '1','1','1', '1', '1', '1', '1', 1, '2012-07-23', '1', '1', '11', '1', '', '1', '1', '1', '1', '1', '1');`, (err, rows) => {
+    mysqlConnection.query(`call axe.personas_lic('SA', '1','1','1', '1', '1', '1', '1', 1, '2012-07-23', '1', '1', '11', '1', '', '1', '1', '1', '1', '1', '1', '1');`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -45,6 +45,7 @@ router.get('/GETpersonas', verifyToken, (req, res) => {
   
        });
   });
+
   router.get('/personas', verifyToken, (req, res) => {
   
            // mysqlConnection.query(`CALL SP_MP_PERSONAS('MP_PERSONAS', 'SA', NULL, NULL, '0', '0', '0', '0', '0', 0,'1990-01-01','0')`, (err, rows) => {
