@@ -829,6 +829,28 @@ router.post('/roles_objetos', async (req, res) => {
 });
 
 
+router.post('/rol_en_uso', async (req, res) => {
+    try {
+        const { COD_ROL } = req.body;
+
+        // Validar los datos de entrada aquí si es necesario
+        // 
+        const consulta = `call axe.SP_MS_ROLES_PERMISOS('EXI', 0, ${COD_ROL}, 0, 0, 0, 0, 0, 'a');`;
+
+        mysqlConnection.query(consulta, (error, results) => {
+            if (error) {
+                console.error('Error en la consulta:', error);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+
+            res.status(200).json(results[0]);
+        });
+    } catch (catchError) {
+        console.error('Error en el bloque catch:', catchError);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 
 
 // Insertar datos
