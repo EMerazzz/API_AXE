@@ -487,12 +487,13 @@ router.put("/del_roles/:COD_ROL", verifyToken, (req, res) => {
 router.post('/roles', verifyToken, (req, res) => {
     const { DESCRIPCION, MODIFICADO_POR,Estado_registro} = req.body;
     const query = `
-      SET @DESCRIPCION = ?;
-      SET @MODIFICADO_POR = ?;
-      SET @Estado_registro = ?;
+    SET @Estado_registro = ?;
+    SET @DESCRIPCION = ?;
+    SET @MODIFICADO_POR = ?;
+    
       CALL SP_moduloseguridad('ms_roles', 'I', 1, 1, 1, 1, 1, @Estado_registro,  @DESCRIPCION, @MODIFICADO_POR, '1')
     `;
-    mysqlConnection.query(query, [DESCRIPCION, MODIFICADO_POR,Estado_registro], (err, rows, fields) => {
+    mysqlConnection.query(query, [Estado_registro,DESCRIPCION, MODIFICADO_POR], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Estado de rol ingresado' });
       } else {
