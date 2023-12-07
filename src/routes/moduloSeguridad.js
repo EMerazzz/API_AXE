@@ -70,12 +70,13 @@ router.post('/estado_usuario', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la inserción del nuevo estado de usuario
-                const { DESCRIPCION } = req.body;
+                const { DESCRIPCION, Estado_registro  } = req.body;
                 const query = `
             SET @DESCRIPCION = ?;
-            CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'I', 1, 1, 1, 1, 1, 1,  @DESCRIPCION,'1', '1')
+            SET @Estado_registro = ?;
+            CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'I', 1, 1, @Estado_registro , 1, 1, 1,  @DESCRIPCION,'1', '1')
           `;
-                mysqlConnection.query(query, [DESCRIPCION], (err, rows, fields) => {
+                mysqlConnection.query(query, [DESCRIPCION, Estado_registro ], (err, rows, fields) => {
                     if (!err) {
                         res.json({ status: 'Estado de usuario ingresado' });
                     } else {
@@ -89,35 +90,38 @@ router.post('/estado_usuario', verifyToken, (req, res) => {
     }
 });
 
-//Actualizar registro
-router.put('/estado_usuario/:COD_ESTADO_USUARIO', verifyToken, (req, res) => {
+// Actualizar registro
+router.put('/estado_usuario/:COD_ESTADO_USUARIO', verifyToken, async (req, res) => {
     try {
-        jwt.verify(req.token, global.secretTokenAccess, (err) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
-                // Resto del código que realiza la actualización del estado de usuario
-                const { DESCRIPCION,Estado_registro} = req.body;
-                const { COD_ESTADO_USUARIO } = req.params;
+        const decoded = await jwt.verify(req.token, global.secretTokenAccess);
+        // Resto del código que realiza la actualización del estado de usuario
+        const { DESCRIPCION, Estado_registro } = req.body;
+        const { COD_ESTADO_USUARIO } = req.params;
 
-                mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'U', ?, 1, 1, 1, 1, 1,  ?, '1' , '1')",
-                    [COD_ESTADO_USUARIO, DESCRIPCION,Estado_registro],
-                    (err, rows, fields) => {
-                        if (!err) {
-                            // Retornar lo actualizado
-                            res.status(200).json(req.body);
-                        } else {
-                            console.log(err);
-                        }
-                    }
-                );
+        const query = `
+            SET @COD_ESTADO_USUARIO = ?;
+            SET @DESCRIPCION = ?;
+            SET @Estado_registro = ?;
+            CALL SP_moduloseguridad('MS_ESTADO_USUARIO', 'U', @COD_ESTADO_USUARIO, 1, @Estado_registro, 1, 1, 1, @DESCRIPCION, '1', '1');
+        `;
+
+        mysqlConnection.query(query, [COD_ESTADO_USUARIO, DESCRIPCION, Estado_registro], (err, rows, fields) => {
+            if (!err) {
+                // Retornar lo actualizado
+                res.status(200).json({ message: 'Estado de usuario actualizado exitosamente' });
+            } else {
+                console.log(err);
+                res.status(500).json({ error: 'No se pudo actualizar el estado de usuario' });
             }
         });
     } catch (error) {
-        res.send(error);
+        console.error(error);
+        res.sendStatus(403);
     }
 });
+
+
+
 
 
 //*************************** TABLA MS_PERMISOS *********************************/
@@ -700,7 +704,7 @@ router.get('/preguntas', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_MS_PREGUNTAS('mostrar','1','1');`;
+                const consulta = `CALL SP_MS_PREGUNTAS('mostrar','1','1','1');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -857,13 +861,15 @@ router.post('/rol_en_uso', async (req, res) => {
 
 // Insertar datos
 router.post('/preguntas', verifyToken, (req, res) => {
-    const {PREGUNTA } = req.body;
+    const {PREGUNTA, Estado_registro } = req.body;
     const query = `
       SET @PREGUNTA = ?;
-      CALL SP_MS_PREGUNTAS('I','1', @PREGUNTA)
+      SET @Estado_registro = ?;
+      
+      CALL SP_MS_PREGUNTAS('I','1', @PREGUNTA, @Estado_registro)
     `
     ;
-    mysqlConnection.query(query, [PREGUNTA], (err, rows, fields) => {
+    mysqlConnection.query(query, [PREGUNTA,Estado_registro], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nueva Pregunta ingresada exitosamente' });
       } else {
@@ -874,21 +880,22 @@ router.post('/preguntas', verifyToken, (req, res) => {
 
   //Actualizar un Registro
   router.put('/preguntas/:COD_PREGUNTA', verifyToken, (req, res) => {
-    const {COD_PREGUNTA} = req.params;
-    const {PREGUNTA } = req.body;
+    const { COD_PREGUNTA } = req.params;
+    const { PREGUNTA, Estado_registro } = req.body;
     const query = `
-      SET @PREGUNTA = ?;
-      CALL SP_MS_PREGUNTAS('U',@COD_PREGUNTA, @PREGUNTA)
-          `
-    ;
-    mysqlConnection.query(query, [COD_PREGUNTA], [PREGUNTA],(err, rows, fields) => {
+      CALL SP_MS_PREGUNTAS('U', ?, ?, ?);
+    `;
+  
+    mysqlConnection.query(query, [COD_PREGUNTA, PREGUNTA, Estado_registro], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Pregunta modificada exitosamente' });
       } else {
+        console.error(err);
         res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
       }
     });
   });
+  
 
 
    router.put("/del_preguntas/:COD_PREGUNTA",verifyToken, (req, res) => {
@@ -921,7 +928,7 @@ router.get('/objetos', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_MS_OBJETOS('1','1','1','1','SA');`;
+                const consulta = `CALL SP_MS_OBJETOS('1','1','1','1','SA','1');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -964,32 +971,36 @@ router.put("/del_objetos/:COD_OBJETO", verifyToken, (req, res) => {
 });
 //Insertar
 router.post('/objetos', verifyToken, (req, res) => {
-    const { OBJETO, DESCRIPCION, TIPO_OBJETO } = req.body;
+    const { OBJETO, DESCRIPCION, TIPO_OBJETO, Estado_registro } = req.body;
     const query = `
       SET @OBJETO = ?;
       SET @DESCRIPCION = ?;
-      SET @TIPO_OBJETO = ?;  -- Corregido: el nombre del parámetro estaba mal escrito
-      CALL SP_MS_OBJETOS('1', @OBJETO, @DESCRIPCION, @TIPO_OBJETO, 'I');  -- Corregido: eliminado el signo de interrogación antes de @OBJETO
+      SET @TIPO_OBJETO = ?;
+      SET @Estado_registro = ?;
+  
+      CALL SP_MS_OBJETOS(NULL, @OBJETO, @DESCRIPCION, @TIPO_OBJETO, 'I', @Estado_registro);
     `;
-    mysqlConnection.query(query, [OBJETO, DESCRIPCION, TIPO_OBJETO], (err, rows, fields) => {
+  
+    mysqlConnection.query(query, [OBJETO, DESCRIPCION, TIPO_OBJETO, Estado_registro], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nuevo Objeto ingresado exitosamente' });
       } else {
         console.error(err);  // Imprimir el error en la consola para ayudar en la depuración
-        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+        res.status(500).json({ error: 'Error interno del servidor' });
       }
     });
   });
+  
   
   router.put("/objetos/:COD_OBJETO", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
       const { COD_OBJETO } = req.params;
-      const { OBJETO, DESCRIPCION, TIPO_OBJETO } = req.body;
+      const { OBJETO, DESCRIPCION, TIPO_OBJETO, Estado_registro} = req.body;
       
       // Corrección en la construcción de la consulta SQL
-      const sql = `CALL SP_MS_OBJETOS('${COD_OBJETO}','${OBJETO}','${DESCRIPCION}','${TIPO_OBJETO}','U')`;
+      const sql = `CALL SP_MS_OBJETOS('${COD_OBJETO}','${OBJETO}','${DESCRIPCION}','${TIPO_OBJETO}','U', '${Estado_registro}')`;
     
       mysqlConnection.query(sql, (error) => {
         if (!error) {
@@ -1017,7 +1028,7 @@ router.get('/parametros', verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 // Resto del código que realiza la consulta a la tabla de preguntas de contraseña
-                const consulta = `CALL SP_MS_PARAMETROS1('SA','1','1','1','1');`;
+                const consulta = `CALL SP_MS_PARAMETROS1('SA','1','1','1','1','1');`;
                 mysqlConnection.query(consulta, (error, results) => {
                     if (error) throw error;
                     if (results.length > 0) {
@@ -1035,23 +1046,25 @@ router.get('/parametros', verifyToken, (req, res) => {
 
 // INSERTAR
 router.post('/parametros', verifyToken, (req, res) => {
-    const { PARAMETRO, VALOR, USUARIO } = req.body;
+    const { PARAMETRO, VALOR, USUARIO, Estado_registro } = req.body;
     const query = `
       SET @PARAMETRO = ?;
       SET @VALOR = ?;
       SET @USUARIO = ?;
-      CALL SP_MS_PARAMETROS1('I','1',@PARAMETRO,@VALOR,@USUARIO);
+      SET @Estado_registro = ?;
+      CALL SP_MS_PARAMETROS1('I', @TipoOperacion, @PARAMETRO, @VALOR, @USUARIO, @Estado_registro);
     `;
   
-    mysqlConnection.query(query, [PARAMETRO, VALOR, USUARIO], (err, rows, fields) => {
+    mysqlConnection.query(query, [PARAMETRO, VALOR, USUARIO, Estado_registro], (err, rows, fields) => {
       if (!err) {
         res.json({ status: 'Nuevo parámetro ingresado exitosamente' });
       } else {
         console.error(err);
-        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+        res.status(500).json({ error: 'Error interno del servidor' });
       }
     });
   });
+  
   
 
   //ACTUALIZAR LOS DATOS
@@ -1059,13 +1072,13 @@ router.post('/parametros', verifyToken, (req, res) => {
  router.put("/parametros/:COD_PARAMETRO", verifyToken, (req, res) => {
     try {
       const { COD_PARAMETRO } = req.params;
-      const { PARAMETRO, USUARIO, VALOR } = req.body;
+      const { PARAMETRO, USUARIO, VALOR, Estado_registro } = req.body;
   
       // Utilizar consultas preparadas para evitar inyecciones de SQL
-      const sql = "CALL SP_MS_PARAMETROS1(?, ?, ?, ?, ?)";
+      const sql = "CALL SP_MS_PARAMETROS1(?, ?, ?, ?, ?, ?)";
   
       // Utilizar un array para los valores de los parámetros
-      const values = ['U', COD_PARAMETRO, PARAMETRO, VALOR, USUARIO];
+      const values = ['U', COD_PARAMETRO, PARAMETRO, VALOR, USUARIO, Estado_registro];
   
       mysqlConnection.query(sql, values, (error) => {
         if (!error) {
