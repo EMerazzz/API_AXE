@@ -84,10 +84,10 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
   router.put('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
            // Verificación de JWT ya realizada por el middleware verifyToken 
       const { COD_DOCENTE } = req.params;
-    const {COD_PERSONA, NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR, HORAS_SEMANALES} = req.body;
+    const {COD_PERSONA,CARGO_ACTUAL, HORAS_SEMANALES, USUARIO_MODIFICADOR, Estado_registro} = req.body;
     console.log(HORAS_SEMANALES);
     const query = `
-    CALL SP_modulodocentes('MD_DOCENTES', 'U', 0,${COD_PERSONA}, 0, ${HORAS_SEMANALES}, '${CARGO_ACTUAL}','1','1', '${USUARIO_MODIFICADOR}', ${Estado_registro});
+    CALL SP_modulodocentes('MD_DOCENTES',       'U',    ${COD_DOCENTE} ,${COD_PERSONA},  ${HORAS_SEMANALES},  0, '${CARGO_ACTUAL}','1','1', '${USUARIO_MODIFICADOR}', ${Estado_registro});
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err) {
