@@ -45,8 +45,9 @@ router.put("/del_asignaturas/:COD_ASIGNATURA", verifyToken, (req, res) => {
 //Metodo Post
 router.post("/asignaturas", verifyToken, (req, res) => {
     try {
-        const { NOMBRE_ASIGNATURA} = req.body;
-        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','I','1','1','1','${NOMBRE_ASIGNATURA}','null','null','null')`;
+        const { NOMBRE_ASIGNATURA, Estado_registro} = req.body;
+        //            call axe.SP_moduloAcademico('NOMBRETABLA', 'FUNCION', PARAMETROBI, PARAMETROINT1, PARAMETROINT2, 'PARAMETROV1',  'PARAMETROV2', 'PARAMETROV3', 'PARAMETROV4');
+        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS',    'I',     '1',          ${Estado_registro},          '1',       '${NOMBRE_ASIGNATURA}','null',       'null',         'null')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -65,8 +66,10 @@ router.post("/asignaturas", verifyToken, (req, res) => {
 router.put("/asignaturas/:COD_ASIGNATURA", verifyToken,(req, res) => {
     try {
         const { COD_ASIGNATURA } = req.params;
-        const { NOMBRE_ASIGNATURA,Estado_registro} = req.body;
-        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS','U','${COD_ASIGNATURA}','1','1','${NOMBRE_ASIGNATURA}','null','null','null')`;
+        const { NOMBRE_ASIGNATURA, Estado_registro} = req.body;
+        console.log(COD_ASIGNATURA);
+         //            call axe.SP_moduloAcademico('NOMBRETABLA', 'FUNCION',   PARAMETROBI,          PARAMETROINT1,        PARAMETROINT2,    'PARAMETROV1',         'PARAMETROV2',  'PARAMETROV3', 'PARAMETROV4');
+        const sql = `call axe.SP_moduloAcademico('MA_ASIGNATURAS',   'U',   ${COD_ASIGNATURA},   ${Estado_registro},          '1',       '${NOMBRE_ASIGNATURA}',  'null',          'null',       'null')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
