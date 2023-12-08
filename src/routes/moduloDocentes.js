@@ -22,17 +22,21 @@ const mysqlConnection = require('../database');
 router.get('/docentes', verifyToken, (req, res) => {
   // Verificación de JWT ya realizada por el middleware verifyToken
 
-  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0,0,0,'0','0','0','1');`;
+  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0, 0, 0, '0', '0', '0', '', 0);;`;
 
-  mysqlConnection.query(query, (err, rows, fields) => {
-    if (!err) {
-      res.json(rows[0]);
-    } else {
-      console.log('Error al consultar la tabla MD_DOCENTES');
-      res.status(500).json({ message: "Error al consultar la tabla MD_DOCENTES" });
+  mysqlConnection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al consultar la tabla MD_DOCENTES:', err.message);
+      return res.status(500).json({ message: 'Error al consultar la tabla MD_DOCENTES' });
     }
+
+    // La consulta fue exitosa, pero los resultados están en results[0]
+    const rows = results[0];
+    res.json(rows);
   });
 });
+
+
 
 //MOSTRAR DATOS DE LA TABLA SEGUN COD_DOCENTE
 router.put('/del_docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
@@ -54,32 +58,27 @@ router.put('/del_docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
   });
 });
 
-
-//INSERTAR DATOS EN LA TABLA DE MD_DOCENTES
+// INSERTAR DATOS EN LA TABLA DE MD_DOCENTES
 router.post('/docentes', /*verifyToken,*/ (req, res) => {
-          // Verificación de JWT ya realizada por el middleware verifyToken
-    const {COD_PERSONA,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR,Estado_registro, HORAS_SEMANALES} = req.body;
-   
-    const query = `
+  // Verificación de JWT ya realizada por el middleware verifyToken
+  const { COD_PERSONA, CARGO_ACTUAL, USUARIO_MODIFICADOR, Estado_registro, HORAS_SEMANALES } = req.body;
 
-      SET @COD_PERSONA = ?;
-      SET @NOMBRE_DOCENTE = ?;
-      SET @ESPECIALIDAD = ?;
-      SET @GRADO_ENSENIANZA = ?;
-      SET @USUARIO_MODIFICADOR = ?;
+  const query = `
+    CALL SP_modulodocentes('MD_DOCENTES', 'I', 0,${COD_PERSONA}, 0, ${HORAS_SEMANALES}, '${CARGO_ACTUAL}','1','1', '${USUARIO_MODIFICADOR}', ${Estado_registro});
+  `;
 
-      
-      CALL SP_modulodocentes('MD_DOCENTES', 'I', '0',@COD_PERSONA, @HORAS_SEMANALES,0,@NOMBRE_DOCENTE,@ESPECIALIDAD,@GRADO_ENSENIANZA,@USUARIO_MODIFICADOR);
-    `;
-    mysqlConnection.query(query, [COD_PERSONA, HORAS_SEMANALES,NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR], (err, rows, fields) => {
-      if(!err) {
-        res.json({status: 'DOCENTE Ingresado'});
-      } else {
-        console.log(err);
-      }
-    });
-  
-  });//FIN DEL POST PARA INSERTAR EN MD_DOCENTES
+  mysqlConnection.query(query, (err, rows, fields) => {
+    if (!err) {
+      res.json({ status: 'DOCENTE Ingresado' });
+    } else {
+      console.log(err);
+      res.status(500).json({ error: 'Error al insertar en MD_DOCENTES' });
+    }
+  });
+});
+
+
+
 
   //UPDATE DE LA TABLA  MD_DOCENTES
   router.put('/docentes/:COD_DOCENTE',  verifyToken, (req, res) => {
@@ -88,7 +87,7 @@ router.post('/docentes', /*verifyToken,*/ (req, res) => {
     const {COD_PERSONA, NOMBRE_DOCENTE,ESPECIALIDAD,GRADO_ENSENIANZA,USUARIO_MODIFICADOR, HORAS_SEMANALES} = req.body;
     console.log(HORAS_SEMANALES);
     const query = `
-    CALL SP_modulodocentes('MD_DOCENTES', 'U','${COD_DOCENTE}',0,'${HORAS_SEMANALES}',0,'${NOMBRE_DOCENTE}','${ESPECIALIDAD}','${GRADO_ENSENIANZA}','${USUARIO_MODIFICADOR}') ;
+    CALL SP_modulodocentes('MD_DOCENTES', 'U', 0,${COD_PERSONA}, 0, ${HORAS_SEMANALES}, '${CARGO_ACTUAL}','1','1', '${USUARIO_MODIFICADOR}', ${Estado_registro});
     `;
     mysqlConnection.query(query, (err, rows, fields) => {
         if(!err) {
