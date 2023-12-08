@@ -6,7 +6,7 @@ const mysqlConnection = require('../database');
 const jwt = require('jsonwebtoken')
 const verifyToken = require('./verify');
 /*************************TABLA PERSONAS ****************************/
-//MOTRAR DATOS DE LA TABLA DE ASIGNATURAS
+//MOTRAR DATOS DE LA TABLA DE matricula
 router.get('/matricula', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
@@ -19,7 +19,19 @@ router.get('/matricula', verifyToken, (req, res) => {
       }
     });
   });
+
+  router.get('/verEstudiante', verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
   
+    mysqlConnection.query(`CALL SP_ESTUDIANTES();`, (err, rows) => {
+      if (!err) {
+        res.status(200).json(rows[0]);
+      } else {
+        console.log('Se ha producido un error');
+        res.sendStatus(500);
+      }
+    });
+  });
 //GET por codigo
 router.put("/del_matricula/:COD_MATRICULA", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
