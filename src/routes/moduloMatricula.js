@@ -7,10 +7,11 @@ const jwt = require('jsonwebtoken')
 const verifyToken = require('./verify');
 /*************************TABLA PERSONAS ****************************/
 //MOTRAR DATOS DE LA TABLA DE matricula
+/*
 router.get('/matricula', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
-    mysqlConnection.query(`CALL SP_MODULOMATRICULA('MM_MATRICULA', 'SA', 0, 0, 0, 0, '0', '0', '0',0,'0','0');`, (err, rows) => {
+    mysqlConnection.query(`CALL SP_ESTUDIANTES();`, (err, rows) => {
       if (!err) {
         res.status(200).json(rows[0]);
       } else {
@@ -19,7 +20,7 @@ router.get('/matricula', verifyToken, (req, res) => {
       }
     });
   });
-
+*/
   router.get('/verEstudiante', verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
@@ -58,8 +59,9 @@ router.post("/matricula", verifyToken, (req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
-      const { COD_PERSONA, COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, ESTADO_MATRICULA, JORNADA, SECCION,COD_PADRE_TUTOR,USUARIO_MODIFICADOR,Estado_registro,SEGUNDO_ENCARGADO} = req.body;
-      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'I', 0, ${COD_PERSONA}, ${COD_NIVEL_ACADEMICO}, ${COD_ANIO_ACADEMICO}, '${ESTADO_MATRICULA}', '${JORNADA}', '${SECCION}','${COD_PADRE_TUTOR}','${USUARIO_MODIFICADOR}','1');`;
+      const { COD_ESTUDIANTE, COD_PADRE_TUTOR, COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, COD_SECCIONES, JORNADA, USUARIO_MODIFICADOR, Estado_registro} = req.body;
+      // call axe.SP_MODULOMATRICUlA      ('NOMBRETABLA', 'FUNCION', PARAMETROBI,     PARAMETROINT1,      PARAMETROINT2,       PARAMETROINT3,           PARAMETROINT4,          PARAMETROINT5,       'PARAMETROV1',   'PARAMETROV2',     'PARAMETROV3',  'PV_USUARIO',                 PARAMETROINT6);
+      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'U',          0,         ${COD_ESTUDIANTE},   ${COD_PADRE_TUTOR} ,${COD_NIVEL_ACADEMICO},   ${COD_ANIO_ACADEMICO},    ${COD_SECCIONES},   '${JORNADA}',    'PARAMETROV2',     'PARAMETROV3', '${USUARIO_MODIFICADOR}',    ${Estado_registro});`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
@@ -81,8 +83,8 @@ router.put("/matricula/:COD_MATRICULA", verifyToken, (req, res) => {
   
     try {
       const { COD_MATRICULA } = req.params;
-      const { COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, ESTADO_MATRICULA, JORNADA, SECCION ,COD_PADRE_TUTOR, USUARIO_MODIFICADOR, Estado_registro,SEGUNDO_ENCARGADO} = req.body;
-      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'U', ${COD_MATRICULA}, 1, ${COD_NIVEL_ACADEMICO}, ${COD_ANIO_ACADEMICO}, '${ESTADO_MATRICULA}', '${JORNADA}', '${SECCION}','${COD_PADRE_TUTOR}','${USUARIO_MODIFICADOR}','1');`;
+      const { COD_ESTUDIANTE, COD_PADRE_TUTOR, COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, COD_SECCIONES, JORNADA, USUARIO_MODIFICADOR, Estado_registro} = req.body;
+      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'U',  ${COD_MATRICULA},         ${COD_ESTUDIANTE},   ${COD_PADRE_TUTOR} ,${COD_NIVEL_ACADEMICO},   ${COD_ANIO_ACADEMICO},    ${COD_SECCIONES},   '${JORNADA}',    'PARAMETROV2',     'PARAMETROV3', '${USUARIO_MODIFICADOR}',    ${Estado_registro});`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
