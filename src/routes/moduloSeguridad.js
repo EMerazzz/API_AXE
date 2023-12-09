@@ -510,11 +510,10 @@ router.post('/roles', verifyToken, (req, res) => {
 router.put('/roles/:COD_ROL', verifyToken, (req, res) => {
     const { DESCRIPCION, MODIFICADO_POR, Estado_registro} = req.body;
     const { COD_ROL } = req.params;
-  
     mysqlConnection.query(
     //call axe.SP_moduloseguridad('NOMBRETABLA', 'FUNCION', PARAMETROBI, PARAMETROBI2, PARAMETROINT1, PARAMETROINT2, PARAMETROINT3, PARAMETROINT4, 'PARAMETROV1', 'PARAMETROINT2', 'PARAMETROINT3');
-      "CALL SP_moduloseguridad('MS_ROLES',        'U',     ?,              1,            1,              1 ,            1,              ?,           ?,             ? ,              '1')",
-      [COD_ROL, Estado_registro,DESCRIPCION ,MODIFICADO_POR],
+      "CALL SP_moduloseguridad('MS_ROLES',        'U',         ?,              1,            1,              1 ,            1,              ?,           ?,             ? ,              '1')",
+      [COD_ROL, Estado_registro, DESCRIPCION ,MODIFICADO_POR],
       (err, rows, fields) => {
         //CALL SP_moduloseguridad('ms_roles', 'U', 2, 1, 1, 1, 1, 1,  'Usuario Normal','John Wick', '1')
         if (!err) {
