@@ -161,7 +161,7 @@ router.post("/padres_tutores", verifyToken, (req, res) => {
   });
   
  //Metodo put
-router.put("/padres_tutores/:COD_PADRE_TUTOR", /*verifyToken, */(req, res) => {
+router.put("/padres_tutores/:COD_PERSONA", /*verifyToken, */(req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
