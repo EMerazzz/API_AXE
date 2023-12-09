@@ -616,7 +616,7 @@ router.post('/usuarios', verifyToken, (req, res) => {
 
 
 //modificar
-router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
+/*router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
     try {
         jwt.verify(req.token, global.secretTokenAccess, (err) => {
             if (err) {
@@ -648,7 +648,29 @@ router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Error en la actualización del registro' });
     }
-});
+});*/
+ // Ruta para modificar una persona existente
+ router.put("/usuarios/:COD_USUARIO", verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
+  
+    try {
+      const { COD_USUARIO } = req.params;
+      const {USUARIO, CONTRASENA, PRIMER_INGRESO, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO, Estado_registro } = req.body;
+      const sql =  `CALL SP_moduloseguridad('MS_USUARIOS', 'U', ${COD_USUARIO}, ${COD_PERSONA} , ${PRIMER_INGRESO}, ${COD_ESTADO_USUARIO}, 1, 1,${USUARIO},${CONTRASENA} ,${MODIFICADO_POR})`;
+      mysqlConnection.query(sql, error => {
+        if (!error) {
+          res.json({
+            Status: "Usuario Modificado"
+          });
+        } else {
+          console.log(error);
+          res.status(500).json({ message: "Error al modificar el Usuario" });
+        }
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  });
 
 //mostrar bitacora
 router.get('/bitacora', verifyToken, (req, res) => {
