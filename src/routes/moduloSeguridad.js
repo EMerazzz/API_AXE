@@ -656,7 +656,7 @@ router.post('/usuarios', verifyToken, (req, res) => {
     try {
       const { COD_USUARIO } = req.params;
       const {USUARIO, CONTRASENA, PRIMER_INGRESO, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO, Estado_registro } = req.body;
-      const sql =  `CALL SP_moduloseguridad('MS_USUARIOS', 'U', ${COD_USUARIO}, ${COD_PERSONA} , ${PRIMER_INGRESO}, ${COD_ESTADO_USUARIO}, 1, 1,${USUARIO},${CONTRASENA} ,${MODIFICADO_POR})`;
+      const sql =  `CALL SP_moduloseguridad('MS_USUARIOS', 'U', ${COD_USUARIO}, ${COD_PERSONA} , ${PRIMER_INGRESO}, ${COD_ESTADO_USUARIO}, 1, 1,'${USUARIO}','${CONTRASENA}','${MODIFICADO_POR}')`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
