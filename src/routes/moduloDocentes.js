@@ -22,7 +22,7 @@ const mysqlConnection = require('../database');
 router.get('/docentes', verifyToken, (req, res) => {
   // Verificación de JWT ya realizada por el middleware verifyToken
 
-  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0, 0, 0, '0', '0', '0', '', 0);;`;
+  const query = `CALL SP_modulodocentes('MD_DOCENTES', 'SA', 0, 0, 0, 0, '0', '0', '0', '0', 0);;`;
 
   mysqlConnection.query(query, (err, results) => {
     if (err) {
