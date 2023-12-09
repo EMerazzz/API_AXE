@@ -403,7 +403,7 @@ router.get('/Secciones', verifyToken, (req, res) => {
           //  if (err) {
           //      res.sendStatus(403);
            // } else {
-                mysqlConnection.query(`Call SP_moduloAcademico('MA_SECCIONES','SA','1','1','1','null','null','null','null',null)`, (err, rows) => {
+                mysqlConnection.query(`Call SP_moduloAcademico('MA_SECCIONES','SA','1','1','1','null','null','null','null','1')`, (err, rows) => {
                     if (!err) {
                         res.status(200).json(rows[0]);
                     } else {
@@ -452,7 +452,7 @@ router.post("/Secciones", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { DESCRIPCION_SECCIONES,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_SECCIONES','I','1','${Estado_registro}','1','${DESCRIPCION_SECCIONES}','null','null','null','null')`;
+                const sql = `Call SP_moduloAcademico('MA_SECCIONES','I','1','1','1','${DESCRIPCION_SECCIONES}','null','null','null','${Estado_registro}')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
@@ -479,7 +479,7 @@ router.put("/Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
             } else {
                 const { COD_SECCIONES } = req.params;
                 const { DESCRIPCION_SECCIONES,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_SECCIONES','U','${COD_SECCIONES}','${Estado_registro}','1','${DESCRIPCION_SECCIONES}','null','null','null','null')`;
+                const sql = `Call SP_moduloAcademico('MA_SECCIONES','U','${COD_SECCIONES}','1','1','${DESCRIPCION_SECCIONES}','null','null','null','${Estado_registro}')`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
