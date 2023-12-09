@@ -177,7 +177,7 @@ router.put("/padres_tutores/:COD_PERSONA", /*verifyToken, */(req, res) => {
         Estado_registro
       } = req.body;
   
-        const sql = `call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES', 'UP', '${COD_PERSONA}',1,'${NOMBRE_PADRE_TUTOR}','${APELLIDO_PADRE_TUTOR}','${RELACION_PADRE_ESTUDIANTE}','${TELEFONO}','${USUARIO_MODIFICADOR}',)`;
+        const sql = `call axe.SP_moduloEstudiantes('ME_PADRES_TUTORES', 'UP', '${COD_PERSONA}',1,'${NOMBRE_PADRE_TUTOR}','${APELLIDO_PADRE_TUTOR}','${RELACION_PADRE_ESTUDIANTE}','${TELEFONO}','${USUARIO_MODIFICADOR}')`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
