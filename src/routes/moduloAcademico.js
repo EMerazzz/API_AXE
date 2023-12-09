@@ -205,7 +205,7 @@ router.post("/anio_academico", verifyToken, (req, res) => {
   
     try {
       const { descripcion,Estado_registro } = req.body;
-      const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','I','1','1','1','${descripcion}','null','null','null','null')`;
+      const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','I','1','1','1','${descripcion}','null','null','null',${Estado_registro})`;
       mysqlConnection.query(sql, (error) => {
         if (!error) {
           res.json({
@@ -251,7 +251,7 @@ router.post("/anio_academico", verifyToken, (req, res) => {
             } else {
                 const { COD_ANIO_ACADEMICO } = req.params;
                 const { descripcion,Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','U','${COD_ANIO_ACADEMICO}','1','1','${descripcion}','null','null','null','null')`;
+                const sql = `Call SP_moduloAcademico('MA_ANIO_ACADEMICO','U','${COD_ANIO_ACADEMICO}','1','1','${descripcion}','null','null','null',${Estado_registro})`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
