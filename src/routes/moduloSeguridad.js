@@ -628,7 +628,7 @@ router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
                 const { COD_USUARIO } = req.params;
 
                 mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_USUARIOS', 'U', ?, ? , ?, 1, ?, 1, ?, ? , ?)",
+                    "CALL SP_moduloseguridad('MS_USUARIOS', 'U', ?, ? , ?, 2, ?, 1, ?, ? , ?)",
                     [COD_USUARIO, PRIMER_INGRESO, COD_ESTADO_USUARIO, COD_PERSONA,USUARIO, CONTRASENA, MODIFICADO_POR],
                     (err, rows, fields) => {
                         if (!err) {
