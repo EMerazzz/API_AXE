@@ -165,9 +165,9 @@ router.put("/padres_tutores/:COD_PADRE_TUTOR", /*verifyToken, */(req, res) => {
     // Verificación de JWT ya realizada por el middleware verifyToken
   
     try {
-      const { COD_PADRE_TUTOR } = req.params;
+      const { COD_PERSONA } = req.params;
       const {
-        COD_PERSONA,
+        COD_PADRE_TUTOR,
         TELEFONO,
         NOMBRE_PADRE_TUTOR,
         APELLIDO_PADRE_TUTOR,
