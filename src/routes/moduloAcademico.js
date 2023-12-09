@@ -47,7 +47,7 @@ router.post("/asignaturas", verifyToken, (req, res) => {
     try {
         const { NOMBRE_ASIGNATURA, Estado_registro} = req.body;
         //            call axe.SP_moduloAcademico('NOMBRETABLA', 'FUNCION', PARAMETROBI, PARAMETROINT1, PARAMETROINT2, 'PARAMETROV1',  'PARAMETROV2', 'PARAMETROV3', 'PARAMETROV4');
-        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS',    'I',     '1',          ${Estado_registro},          '1',       '${NOMBRE_ASIGNATURA}','null',       'null',         'null',  null)`;
+        const sql = `Call SP_moduloAcademico('MA_ASIGNATURAS',    'I',     '1',          ${Estado_registro},          '1',       '${NOMBRE_ASIGNATURA}','null',       'null',         'null',  'null')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -69,7 +69,7 @@ router.put("/asignaturas/:COD_ASIGNATURA", verifyToken,(req, res) => {
         const { NOMBRE_ASIGNATURA, Estado_registro} = req.body;
         console.log(COD_ASIGNATURA);
          //            call axe.SP_moduloAcademico('NOMBRETABLA', 'FUNCION',   PARAMETROBI,          PARAMETROINT1,        PARAMETROINT2,    'PARAMETROV1',         'PARAMETROV2',  'PARAMETROV3', 'PARAMETROV4');
-        const sql = `call axe.SP_moduloAcademico('MA_ASIGNATURAS',   'U',   ${COD_ASIGNATURA},   ${Estado_registro},          '1',       '${NOMBRE_ASIGNATURA}',  'null',          'null',       'null', null)`;
+        const sql = `call axe.SP_moduloAcademico('MA_ASIGNATURAS',   'U',   ${COD_ASIGNATURA},   ${Estado_registro},          '1',       '${NOMBRE_ASIGNATURA}',  'null',          'null',       'null', 'null')`;
         mysqlConnection.query(sql, error => {
             if (!error) {
                 res.json({
@@ -348,8 +348,8 @@ router.post("/nivel_academico", verifyToken, (req, res) => {
             if (err) {
                 res.sendStatus(403);
             } else {
-                const {DESCRIPCION,Estado_registro ,PRIMER_NIVEL, SEGUNDO_NIVEL, TERCER_NIVEL } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','I','1','${Estado_registro}','1','${DESCRIPCION}','null','null','null','null')`;
+                const {DESCRIPCION,Estado_registro } = req.body;
+                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','I','1','1','1','${DESCRIPCION}','null','null','null',${Estado_registro})`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
@@ -375,8 +375,8 @@ router.post("/nivel_academico", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { COD_NIVEL_ACADEMICO } = req.params;
-                const { DESCRIPCION,Estado_registro, PRIMER_NIVEL, SEGUNDO_NIVEL, TERCER_NIVEL  } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','U','${COD_NIVEL_ACADEMICO}','${Estado_registro}','1','${DESCRIPCION}','null','null','null','null')`;
+                const { DESCRIPCION,Estado_registro} = req.body;
+                const sql = `Call SP_moduloAcademico('MA_NIVEL_ACADEMICO','U','${COD_NIVEL_ACADEMICO}','1','1','${DESCRIPCION}','null','null','null',${Estado_registro})`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
