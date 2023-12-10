@@ -575,4 +575,79 @@ router.put("/Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
 
 
 
+ /******************** MA_REL_ASIGNATURAS *************************/
+ router.get('/rel_asignaturas', verifyToken, (req, res) => {
+    try {
+      //  jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          //  if (err) {
+          //      res.sendStatus(403);
+           // } else {
+                mysqlConnection.query(`Call SP_moduloAcademico('MA_REL_ASIGNATURAS','SA','1','1','1','null','null','null','null',null)`, (err, rows) => {
+                    if (!err) {
+                        res.status(200).json(rows[0]);
+                    } else {
+                        console.log('Se ha producido un error');
+                        res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+                    }
+                });
+           // }
+       // });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+  //Metodo Post/INSERTAR
+  router.post("/rel_asignaturas", verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                const { COD_ASIGNATURA, COD_NIVACAD_ANIOACAD, Estado_registro } = req.body;
+                const sql = `Call SP_moduloAcademico('MA_REL_ASIGNATURAS','I',1,${COD_ASIGNATURA}, ${COD_NIVACAD_ANIOACAD},'null','null','null','null', '${Estado_registro}')`;
+                mysqlConnection.query(sql, error => {
+                    if (!error) {
+                        res.json({
+                            Status: "Insertado"
+                        });
+                    } else {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
+  //Metodo put o Modificar
+  router.put("/rel_asignaturas/:COD_REL_ASIG", verifyToken, (req, res) => {
+    try {
+        jwt.verify(req.token, global.secretTokenAccess, (err) => {
+            if (err) {
+                res.sendStatus(403);
+            } else {
+                const { COD_REL_ASIG } = req.params;
+                const { COD_ASIGNATURA, COD_NIVACAD_ANIOACAD, Estado_registro  } = req.body;
+                const sql = `Call SP_moduloAcademico('MA_REL_ASIGNATURAS','U',${COD_REL_ASIG},${COD_ASIGNATURA},${COD_NIVACAD_ANIOACAD},'null','null','null','null',${Estado_registro})`;
+                mysqlConnection.query(sql, error => {
+                    if (!error) {
+                        res.json({
+                            Status: "Modificado"
+                        });
+                    } else {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
 module.exports = router;
