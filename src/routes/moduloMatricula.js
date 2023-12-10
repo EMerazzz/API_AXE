@@ -61,7 +61,7 @@ router.post("/matricula", verifyToken, (req, res) => {
     try {
       const { COD_ESTUDIANTE, COD_NIVEL_ACADEMICO, COD_ANIO_ACADEMICO, COD_SECCIONES, JORNADA, USUARIO_MODIFICADOR, Estado_registro} = req.body;
       // call axe.SP_MODULOMATRICUlA      ('NOMBRETABLA', 'FUNCION', PARAMETROBI,     PARAMETROINT1,      PARAMETROINT2,       PARAMETROINT3,           PARAMETROINT4,          PARAMETROINT5,       'PARAMETROV1',   'PARAMETROV2',     'PARAMETROV3',  'PV_USUARIO',                 PARAMETROINT6);
-      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'I',          0,                 0,        ${COD_ESTUDIANTE},  ${COD_NIVEL_ACADEMICO},   ${COD_ANIO_ACADEMICO},    ${COD_SECCIONES},   '${JORNADA}',    'PARAMETROV2',     'PARAMETROV3', '${USUARIO_MODIFICADOR}',    ${Estado_registro});`;
+      const sql = `CALL SP_MODULOMATRICULA('MM_MATRICULA', 'I',          0,         ${COD_ESTUDIANTE},          0,         ${COD_NIVEL_ACADEMICO},   ${COD_ANIO_ACADEMICO},    ${COD_SECCIONES},   '${JORNADA}',    'PARAMETROV2',     'PARAMETROV3', '${USUARIO_MODIFICADOR}',    ${Estado_registro});`;
       mysqlConnection.query(sql, error => {
         if (!error) {
           res.json({
