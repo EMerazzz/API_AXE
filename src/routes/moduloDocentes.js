@@ -202,7 +202,71 @@ router.put("/docentes_asignaturas/:COD_DOCENTE_ASIGNATURA", verifyToken, (req, r
   }
 });
 
+//Tabla relacion Docentes y asignaturas
+router.get('/rel_docentes_asig', verifyToken, (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
+
+  const query = `CALL SP_modulodocentes('MA_REL_DOCENTES_ASIGNATURAS', 'SA', 0, 0, 0, 0, '0', '0', '0', '0', 0);;`;
+
+  mysqlConnection.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al consultar la tabla MA_REL_DOCENTES_ASIGNATURAS:', err.message);
+      return res.status(500).json({ message: 'Error al consultar la tabla MD_DOCENTES' });
+    }
+
+    // La consulta fue exitosa, pero los resultados están en results[0]
+    const rows = results[0];
+    res.json(rows);
+  });
+});
+
+router.post('/rel_docentes_asig', /*verifyToken,*/ (req, res) => {
+  // Verificación de JWT ya realizada por el middleware verifyToken
+  const {COD_ASIGNATURA,COD_DOCENTE ,Estado_registro } = req.body;
+
+  const query = `
+    CALL SP_modulodocentes('MA_REL_DOCENTES_ASIGNATURAS', 'I', 0, '${COD_ASIGNATURA}', '${COD_DOCENTE}', 0, '1','1','1', '1', ${Estado_registro});
+  `;
+
+  mysqlConnection.query(query, (err, rows, fields) => {
+    if (!err) {
+      res.json({ status: 'Dato Ingresado Correctamente' });
+    } else {
+      console.log(err);
+      res.status(500).json({ error: 'Error al insertar la relación' });
+    }
+  });
+});
+
+router.put("/rel_docentes_asig/:COD_DOCEN_ASIG", verifyToken, (req, res) => {
+  try {
+      jwt.verify(req.token, global.secretTokenAccess, (err) => {
+          if (err) {
+              res.sendStatus(403);
+          } else {
+              const { COD_DOCEN_ASIG } = req.params;
+              const { COD_ASIGNATURA,COD_DOCENTE,Estado_registro } = req.body;
+              const sql = `CALL SP_modulodocentes('MA_REL_DOCENTES_ASIGNATURAS', 'U', '${COD_DOCEN_ASIG}', '${COD_ASIGNATURA}', '${COD_DOCENTE}', 0, '1','1','1', '1', ${Estado_registro});`;
+              mysqlConnection.query(sql, error => {
+                  if (!error) {
+                      res.json({
+                          Status: "Modificado Correctamente"
+                      });
+                  } else {
+                      console.log(error);
+                      res.sendStatus(500); // Devolver un error interno del servidor si ocurre algún problema
+                  }
+              });
+          }
+      });
+  } catch (error) {
+      res.send(error);
+  }
+});
+
+
 module.exports = router;
+
   
 
 
