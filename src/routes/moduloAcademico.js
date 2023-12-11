@@ -605,7 +605,7 @@ router.put("/Secciones/:COD_SECCIONES", verifyToken, (req, res) => {
                 res.sendStatus(403);
             } else {
                 const { COD_ASIGNATURA, COD_NIVACAD_ANIOACAD, Estado_registro } = req.body;
-                const sql = `Call SP_moduloAcademico('MA_REL_ASIGNATURAS','I',1,${COD_ASIGNATURA}, ${COD_NIVACAD_ANIOACAD},'null','null','null','null', '${Estado_registro}')`;
+                const sql = `Call SP_moduloAcademico('MA_REL_ASIGNATURAS','I',1,${COD_ASIGNATURA}, ${COD_NIVACAD_ANIOACAD},'null','null','null','null', ${Estado_registro})`;
                 mysqlConnection.query(sql, error => {
                     if (!error) {
                         res.json({
