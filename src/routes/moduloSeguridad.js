@@ -615,41 +615,29 @@ router.post('/usuarios', verifyToken, (req, res) => {
 });
 
 
-//modificar
+//modificar usuario
 router.put('/usuarios/:COD_USUARIO', verifyToken, (req, res) => {
+    // Verificación de JWT ya realizada por el middleware verifyToken
+  
     try {
-        jwt.verify(req.token, global.secretTokenAccess, (err) => {
-            if (err) {
-                // Si hay un error en la verificación del token, enviar una respuesta 403 (Prohibido)
-                res.sendStatus(403);
-            } else {
-                // Resto del código que actualiza el registro
-                const { USUARIO, CONTRASENA, PRIMER_INGRESO, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO, Estado_registro } = req.body;
-                const { COD_USUARIO } = req.params;
-
-                mysqlConnection.query(
-                    "CALL SP_moduloseguridad('MS_USUARIOS', 'U', ?, 1, ?, 1, ?, 1, ?, ? , ?)",
-                    [COD_USUARIO, PRIMER_INGRESO, COD_ESTADO_USUARIO, USUARIO, CONTRASENA, MODIFICADO_POR],
-                    (err, rows, fields) => {
-                        if (!err) {
-                            // Si la actualización es exitosa, devolver los datos actualizados desde la base de datos
-                            res.status(200).json({ message: 'Registro actualizado correctamente', data: rows[0] });
-                        } else {
-                            // Si hay un error en la ejecución del procedimiento almacenado, enviar una respuesta de error
-                            console.log(err);
-                            res.status(500).json({ error: 'Error en la actualización del registro' });
-                        }
-                    }
-                );
-            }
-        });
+      const { COD_USUARIO } = req.params;
+      const { USUARIO, CONTRASENA, PRIMER_INGRESO, MODIFICADO_POR, COD_PERSONA, COD_ESTADO_USUARIO, COD_ROL } = req.body;
+      const sql = `CALL SP_moduloseguridad('MS_USUARIOS', 'U', ${COD_USUARIO}, ${COD_PERSONA}, ${PRIMER_INGRESO}, ${COD_ESTADO_USUARIO}, ${COD_ROL}, 1, '${USUARIO}', '${CONTRASENA}', '${MODIFICADO_POR}');`;
+      mysqlConnection.query(sql, (error) => {
+        if (!error) {
+          res.json({
+            Status: "Usuario modificado"
+          });
+        } else {
+          console.log(error);
+          res.sendStatus(500);
+        }
+      });
     } catch (error) {
-        // Si hay un error en el bloque try, enviar una respuesta de error
-        console.error(error);
-        res.status(500).json({ error: 'Error en la actualización del registro' });
+      res.send(error);
     }
-});
-
+  });
+  
 //mostrar bitacora
 router.get('/bitacora', verifyToken, (req, res) => {
     try {
